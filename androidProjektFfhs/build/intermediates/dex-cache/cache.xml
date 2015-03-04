@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-aa16b3cf885393ef74ba8407c65bcf20627dd05b.jar" />
+    </item>
+    <item
+        jar="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-14a68db0b34e815e055a8c3dfb21e6a01a643641.jar" />
+    </item>
+    <item
+        jar="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\pre-dexed\debug\classes-ca88e9eb833e425ada1611152f6b459d77da161a.jar" />
+    </item>
+    <item
+        jar="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="D:\sandbox\school\trunk\androidProjektFfhs\app\build\intermediates\pre-dexed\debug\classes-ff6d552e7be5987baf54c0d2ad530b2bfbb43b55.jar" />
+    </item>
+
+</items>
