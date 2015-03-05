@@ -2,7 +2,7 @@ package com.example.denisbittante.androidprojektffhs;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
-
+// This is a test from Tobi
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
