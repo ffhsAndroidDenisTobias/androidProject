@@ -14,5 +14,6 @@
         <item>Bern Capitals</item>
         <item>Satus Bern-Länggasse</item>
     </string-array>
+    <string name="title_activity_activity_teams">ActivityTeams</string>
 
 </resources>

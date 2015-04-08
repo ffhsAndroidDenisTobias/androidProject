@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/linearLayout">
+    android:id="@+id/linearLayout3">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -60,7 +60,7 @@
                 android:orientation="vertical">
 
                 <TabWidget
-                    android:id="@android:id/tabs"
+                    android:id="@+id/teamslist"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"></TabWidget>
 
@@ -82,7 +82,7 @@
                         android:orientation="vertical"></LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linearLayout3"
+                        android:id="@+id/linearLayout4"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:orientation="vertical"></LinearLayout>

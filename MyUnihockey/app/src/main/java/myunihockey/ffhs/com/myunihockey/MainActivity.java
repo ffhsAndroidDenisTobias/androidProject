@@ -1,5 +1,6 @@
 package myunihockey.ffhs.com.myunihockey;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,7 +34,11 @@ public class MainActivity extends ActionBarActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
+
+                Intent myIntent = new Intent(MainActivity.this, ActivityTeams.class);
+               // myIntent.putExtra("key", value); //Optional parameters
+                MainActivity.this.startActivity(myIntent);
+
 
             }
         });
