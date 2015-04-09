@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent myIntent = new Intent(MainActivity.this, ActivityTeams.class);
+                Intent myIntent = new Intent(MainActivity.this, MainCard.class);
                // myIntent.putExtra("key", value); //Optional parameters
                 MainActivity.this.startActivity(myIntent);
 

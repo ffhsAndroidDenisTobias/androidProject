@@ -36,5 +36,4 @@
         android:id="@+id/vereinTeamListView"
         android:choiceMode="singleChoice" />
 
-
 </LinearLayout>

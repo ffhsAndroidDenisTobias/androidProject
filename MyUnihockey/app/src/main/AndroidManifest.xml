@@ -24,6 +24,10 @@
             android:name=".MenuV2Activity"
             android:label="@string/title_activity_menu_v2" >
         </activity>
+        <activity
+            android:name=".MainCard"
+            android:label="Willkommen">
+        </activity>
     </application>
 
 </manifest>
