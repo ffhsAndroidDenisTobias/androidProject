@@ -1,14 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="myunihockey.ffhs.com.myunihockey.TeamDetailTableActivity">
+
+    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/linearLayout3">
+    android:id="@+id/linearLayout"
+    android:weightSum="1">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/">
 
         <Button
             android:layout_width="71dp"
@@ -60,7 +76,7 @@
                 android:orientation="vertical">
 
                 <TabWidget
-                    android:id="@+id/teamslist"
+                    android:id="@android:id/tabs"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"></TabWidget>
 
@@ -82,7 +98,7 @@
                         android:orientation="vertical"></LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linearLayout4"
+                        android:id="@+id/linearLayout3"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:orientation="vertical"></LinearLayout>
@@ -90,5 +106,13 @@
             </LinearLayout>
         </TabHost>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UHC Bassersdorf - Embrach            2:3 \n..."
+        android:id="@+id/textView6"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.72" />
 
 </LinearLayout>
