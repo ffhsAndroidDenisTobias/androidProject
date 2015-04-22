@@ -1,6 +1,14 @@
 package myunihockey.ffhs.com.myunihockey;
 
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +16,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import myunihockey.ffhs.com.myunihockey.binder.UnihockeyDataBinder;
+import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
+
+import static android.app.PendingIntent.getActivity;
 
 
 public class InitialStartActivity extends ActionBarActivity {
@@ -59,5 +72,65 @@ public class InitialStartActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private static Handler callback;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ((UnihockeyDataBinder) service).setHandler(callback);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+
+    public void onClickStartService(View view) {
+
+        connectToService();
+
+       showAlertDialog();
+
+        destroyService();
+
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage("Hallo")
+                .setPositiveButton("positivButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                    }
+                })
+                .setNegativeButton("Oh No!!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        builder.create();
+
+    }
+
+
+    private void destroyService() {
+        callback.removeCallbacksAndMessages(null);
+        unbindService(serviceConnection);
+        stopService(new Intent(this, UnihockeyDataService.class));
+        //super.onDestroy();
+    }
+
+
+    private void connectToService() {
+        final Intent unihockeyServiceIntent = new Intent(this, UnihockeyDataService.class);
+        bindService(unihockeyServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
     }
 }
