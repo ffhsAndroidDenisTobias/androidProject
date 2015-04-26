@@ -1,5 +1,7 @@
 package myunihockey.ffhs.com.myunihockey.persistence;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,7 @@ public class RestConnector {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         in = new BufferedInputStream(urlConnection.getInputStream());
+        resultToDisplay = IOUtils.toString(in, "UTF-8");
 
         return resultToDisplay;
     }
