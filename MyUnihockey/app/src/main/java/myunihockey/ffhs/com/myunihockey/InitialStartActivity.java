@@ -24,10 +24,11 @@ import static android.app.PendingIntent.getActivity;
 
 
 public class InitialStartActivity extends ActionBarActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        connectToService();
+
         setContentView(R.layout.activity_initial_start);
 
         //spinner:
@@ -51,6 +52,11 @@ public class InitialStartActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyService();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,9 +81,9 @@ public class InitialStartActivity extends ActionBarActivity {
     }
 
 
-    private static Handler callback;
+    private static Handler callback= new Handler();
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private static ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ((UnihockeyDataBinder) service).setHandler(callback);
@@ -93,11 +99,8 @@ public class InitialStartActivity extends ActionBarActivity {
 
     public void onClickStartService(View view) {
 
-        connectToService();
+        showAlertDialog();
 
-       showAlertDialog();
-
-        destroyService();
 
     }
 

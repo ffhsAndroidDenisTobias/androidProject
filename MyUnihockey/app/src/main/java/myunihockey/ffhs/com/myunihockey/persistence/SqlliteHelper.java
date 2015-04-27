@@ -1,4 +1,4 @@
-package com.example.denisbittante.androidprojektffhs.db;
+package myunihockey.ffhs.com.myunihockey.persistence;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +8,7 @@ import android.util.Log;
 /**
  * Created by Denis Bittante on 28.03.2015.
  */
-public class MySQLiteHelper extends SQLiteOpenHelper {
+public class SqlliteHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_COMMENTS = "unihockey";
     public static final String COLUMN_ID = "_id";
@@ -23,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + " integer primary key autoincrement, " + COLUMN_COMMENT
             + " text not null);";
 
-    public MySQLiteHelper(Context context) {
+    public SqlliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -34,7 +34,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(MySQLiteHelper.class.getName(),
+        Log.w(SqlliteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS);
