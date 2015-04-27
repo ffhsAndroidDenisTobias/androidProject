@@ -8,7 +8,12 @@ import java.net.URL;
  */
 public class UnihockeyRestBuilder {
 
+    private static final String REST_API_KEY="diqkOP74wp5UdhBQNKwk2f0SpBY=";
     private static final String REST_TEAM = "http://hallo...%s&team=%s";
+    private static final String REST_LEAGUE = "http://hallo...%s&team=%s";
+    private static final String REST_CLUB = "http://api.swissunihockey.ch/rest/v1.0/clubs/";
+    private static final String REST_GAME = "http://api.swissunihockey.ch/rest/v1.0/clubs/";
+
 
     public URI buildUri(String URL, String... param) {
 
@@ -19,9 +24,21 @@ public class UnihockeyRestBuilder {
     }
 
 
-    public URI getTeamUri(String team, String id) {
+    public URI getTeamUriByTeam(String team, String id) {
         // check param
         return buildUri(REST_TEAM, team, id);
+
+    }
+
+    public URI getTeamUriByLeague(String league, String id) {
+        // check param
+        return buildUri(REST_TEAM, league, id);
+
+    }
+
+    public URI getLeagueUri(String team, String id) {
+        // check param
+        return buildUri(REST_LEAGUE, team, id);
 
     }
 
