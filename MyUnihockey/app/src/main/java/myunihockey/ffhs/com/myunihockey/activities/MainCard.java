@@ -1,7 +1,8 @@
-package myunihockey.ffhs.com.myunihockey;
+package myunihockey.ffhs.com.myunihockey.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -10,14 +11,20 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import myunihockey.ffhs.com.myunihockey.R;
+
 
 public class MainCard extends ActionBarActivity {
+
+
+    private RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainpagecard);
-    }
+   }
 
 
     @Override

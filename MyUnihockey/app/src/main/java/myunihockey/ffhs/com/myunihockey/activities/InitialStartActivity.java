@@ -1,4 +1,4 @@
-package myunihockey.ffhs.com.myunihockey;
+package myunihockey.ffhs.com.myunihockey.activities;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import myunihockey.ffhs.com.myunihockey.R;
 import myunihockey.ffhs.com.myunihockey.binder.UnihockeyDataBinder;
 import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
 
@@ -46,7 +47,9 @@ public class InitialStartActivity extends ActionBarActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
+
+
+
 
             }
         });
