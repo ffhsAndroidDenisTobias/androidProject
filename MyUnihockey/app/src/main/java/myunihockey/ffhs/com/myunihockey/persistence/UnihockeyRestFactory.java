@@ -1,7 +1,8 @@
 package myunihockey.ffhs.com.myunihockey.persistence;
 
 import java.net.URI;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Denis Bittante on 27.04.2015.
@@ -21,36 +22,90 @@ public class UnihockeyRestFactory {
 
 
     public URI getAllClubs() {
-        return buildUri(REST_CLUB);
+
+        UriBuilderHelper helper = new UriBuilderHelper(REST_CLUB);
+        helper.addQuery("apikey", REST_API_KEY);
+        return helper.build();
     }
 
     public URI getByClubId(String clubId) {
-    return buildUri(REST_CLUB +"/%s/");
+        UriBuilderHelper helper = new UriBuilderHelper(REST_CLUB + "%s/", clubId);
+        helper.addQuery("apikey", REST_API_KEY);
+        return helper.build();
     }
 
 
     public URI searchClub(String q) {
 
-       return  buildUri(REST_CLUB + "search/?apikey=%s=&q=%s", REST_API_KEY, q);
+        String s = REST_CLUB + "search/";
+        UriBuilderHelper helper = new UriBuilderHelper(s);
+
+        helper.addQuery("apikey", REST_API_KEY).addQuery("q", q);
+
+        return helper.build();
     }
 
 
-    public URI getByClubIdTeams(String id){
+    public URI getByClubIdTeams(String id) {
 
-        return buildUri(REST_CLUB + "%s/teams?apikey=%s", id, REST_API_KEY);
+        String apiKey = "apikey=%s";
+        String tempUrl = REST_CLUB + "%s/teams?";
+        return buildUri(tempUrl + apiKey, id, REST_API_KEY);
     }
 
 
-    public URI getLeagues(){
+    public URI getLeagues() {
         return buildUri(REST_LEAGUE + "?apikey=%s", REST_API_KEY);
     }
 
-    public URI getByLeagueIdGroups(String leagueId){
+    public URI getByLeagueIdGroups(String leagueId) {
         return buildUri(REST_LEAGUE + "%s/groups?apikey=%s", leagueId, REST_API_KEY);
     }
 
-    public URI getByLeagueByGroupGames(String leagueCode, String groupId){
+    public URI getByLeagueByGroupGames(String leagueCode, String groupId) {
         return buildUri(REST_LEAGUE + "%s/groups/%s/games?apikey=%s", leagueCode, groupId, REST_API_KEY);
+    }
+
+    private class UriBuilderHelper {
+
+        StringBuffer uri;
+        ArrayList<String> paramArray;
+
+
+        public UriBuilderHelper(String uri, String... params) {
+            this.uri = new StringBuffer().append(uri);
+            this.uri.append("?");
+
+            paramArray = new ArrayList<String>();
+            for (String param : params) {
+                paramArray.add(param);
+            }
+        }
+
+        public UriBuilderHelper addQuery(String name, String param) {
+
+            uri.append(name + "=%s&");
+            paramArray.add(param);
+            return this;
+        }
+
+        public URI build() {
+
+            String[] stringArray = paramArray.toArray(new String[paramArray.size()]);
+
+            return buildUri(uri.toString(), stringArray);
+
+        }
+
+
+        public URI buildUri(String URL, String... param) {
+
+            String urlString = String.format(URL, param);
+
+            URI uri = URI.create(urlString);
+            return uri;
+        }
+
     }
 
     public URI buildUri(String URL, String... param) {
@@ -60,6 +115,4 @@ public class UnihockeyRestFactory {
         URI uri = URI.create(urlString);
         return uri;
     }
-
-
 }
