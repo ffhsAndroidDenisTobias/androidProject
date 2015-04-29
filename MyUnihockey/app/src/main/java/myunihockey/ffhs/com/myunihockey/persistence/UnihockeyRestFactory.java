@@ -53,6 +53,10 @@ public class UnihockeyRestFactory {
         return buildUri(REST_LEAGUE + "%s/groups/%s/games?apikey=%s", leagueCode, groupId, REST_API_KEY);
     }
 
+    public URI getByLeagueByGroupGames(String leagueCode, String groupId, String clubId, String gameStatus, String limit, String clubId){
+        return buildUri(REST_LEAGUE + "%s/groups/%s/games?apikey=%s&status=%s&limit=%s&club=%s", leagueCode, groupId, REST_API_KEY, gameStatus, limit, clubId);
+    }
+
     public URI buildUri(String URL, String... param) {
 
         String urlString = String.format(URL, param);
