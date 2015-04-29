@@ -58,6 +58,10 @@ public class UnihockeyRestFactory {
         return buildUri(REST_LEAGUE + "?apikey=%s", REST_API_KEY);
     }
 
+    public URI getByLeagueByGroupGames(String leagueCode, String groupId, String clubId, String gameStatus, String limit, String clubId){
+        return buildUri(REST_LEAGUE + "%s/groups/%s/games?apikey=%s&status=%s&limit=%s&club=%s", leagueCode, groupId, REST_API_KEY, gameStatus, limit, clubId);
+    }
+
     public URI getByLeagueIdGroups(String leagueId) {
         return buildUri(REST_LEAGUE + "%s/groups?apikey=%s", leagueId, REST_API_KEY);
     }
@@ -65,6 +69,7 @@ public class UnihockeyRestFactory {
     public URI getByLeagueByGroupGames(String leagueCode, String groupId) {
         return buildUri(REST_LEAGUE + "%s/groups/%s/games?apikey=%s", leagueCode, groupId, REST_API_KEY);
     }
+
 
     private class UriBuilderHelper {
 
@@ -105,8 +110,9 @@ public class UnihockeyRestFactory {
             URI uri = URI.create(urlString);
             return uri;
         }
-
     }
+
+
 
     public URI buildUri(String URL, String... param) {
 
