@@ -1,21 +1,19 @@
-package myunihockey.ffhs.com.myunihockey.persistence;
+package myunihockey.ffhs.com.myunihockey.persistence.dto;
 
 /**
  * Created by Joker on 01.05.2015.
  */
 public class Team {
 
-    int id;
-    String teamName;
-    int club_id;
-    String leaguetext;
-    int group;
-    String grouptext;
-    int leaguecode;
+    private int id;
+    private String teamName;
+    private int club_id;
+    private String leaguetext;
+    private int group;
+    private String grouptext;
+    private int leaguecode;
 
-    //constructors
-    public Team (){}
-    public Team (String teamName, String leaguetext, String grouptext, int id, int club_id, int group, int leaguecode){
+    public Team(String teamName, String leaguetext, String grouptext, int id, int club_id, int group, int leaguecode) {
         this.teamName = teamName;
         this.leaguetext = leaguetext;
         this.grouptext = grouptext;

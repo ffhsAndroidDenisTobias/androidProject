@@ -1,4 +1,4 @@
-package myunihockey.ffhs.com.myunihockey.persistence;
+package myunihockey.ffhs.com.myunihockey.persistence.dto;
 
 /**
  * Created by Joker on 01.05.2015.

@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 
 import java.net.URI;
 
+import myunihockey.ffhs.com.myunihockey.rest.UnihockeyRestFactory;
+
 /**
  * Created by Denis Bittante on 29.04.2015.
  */

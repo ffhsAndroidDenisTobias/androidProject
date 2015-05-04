@@ -1,4 +1,4 @@
-package myunihockey.ffhs.com.myunihockey.persistence;
+package myunihockey.ffhs.com.myunihockey.rest;
 
 import org.apache.commons.lang3.StringUtils;
 
