@@ -53,10 +53,12 @@ public class UnihockeyRestFactoryTest extends TestCase {
 
     public void testGetGames(){
         String testquery = "query";
-        URI testuri = testee.getGames(testquery);
-        expectedMinimumUri(testuri);
-        expectedPath(testuri, "/rest/v1.0/clubs/1234/");
 
+        String leagueId = "leagueId";
+        String groupId = "groupId";
+        URI testuri = testee.getGames(leagueId, groupId);
+        expectedMinimumUri(testuri);
+        expectedPath(testuri, "/rest/v1.0/leagues/leagueId/groups/groupId/games");
     }
 
 
