@@ -28,33 +28,27 @@ public class SqlliteHelper extends SQLiteOpenHelper {
 
     // Common column names
     private static final String KEY_ID = "id";
+    private static final String KEY_LEAGUETEXT = "leaguetext";
+    private static final String KEY_LEAGUECODE = "leaguecode";
     private static final String KEY_CREATED_AT = "created_at";
-
+    private static final String KEY_WERTUNGSMODUS_ID = "wertungsmodus_id";
     // TEAM Table - column names
     private static final String KEY_TEAM_NAME = "teamName";
     private static final String KEY_CLUB_ID = "club_id";
-    private static final String KEY_LEAGUETEXT = "leaguetext";
     private static final String KEY_GROUP = "group";
+
     private static final String KEY_GROUP_TEXT = "grouptext";
-    private static final String KEY_LEAGUECODE = "leaguecode";
 
     // CLUB Table - column names
     private static final String KEY_CLUB_NAME = "clubName";
-
     // League Table - column names
-    private static final String KEY_LEAGUETEXT = "leaguetext";
     private static final String KEY_FIELD_SIZE = "fieldsize";
-    private static final String KEY_WERTUNGSMODUS_ID = "wertungsmodus_id";
     private static final String KEY_GROUP_ID = "group_id";
 
     // GROUP Table - column names
-    private static final String KEY_ID = "id";
-    private static final String KEY_WERTUNGSMODUS_ID = "wertungsmodus_id";
     private static final String KEY_WERTUNGSMODUS = "wertungsmodus";
     private static final String KEY_LEAGUETYPE = "leaguetype";
     private static final String KEY_FIELDSIZE = "fieldsize";
-    private static final String KEY_LEAGUETEXT = "leaguetext";
-    private static final String KEY_LEAGUECODE = "leaguecode";
 
     // GAME Table - column names
     private static final String KEY_GAME_LEAGUECODE = "leaguecode";

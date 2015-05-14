@@ -17,14 +17,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityTeams"
-            android:label="@string/title_activity_activity_teams" >
-        </activity>
-        <activity
-            android:name=".MenuV2Activity"
-            android:label="@string/title_activity_menu_v2" >
-        </activity>
-        <activity
             android:name=".activities.MainCard"
             android:label="Willkommen">
         </activity>

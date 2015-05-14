@@ -114,6 +114,10 @@ public class UnihockeyRestFactory {
 
             String urlString = String.format(URL, param);
 
+            if (urlString.endsWith("&")) {
+                urlString = urlString.substring(0, urlString.length() - 1);
+            }
+
             URI uri = URI.create(urlString);
             return uri;
         }

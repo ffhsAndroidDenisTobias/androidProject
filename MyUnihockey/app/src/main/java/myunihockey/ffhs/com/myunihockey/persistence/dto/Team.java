@@ -23,7 +23,6 @@ public class Team {
         this.leaguecode = leaguecode;
     }
 
-    //getters
     public int getId() {
         return id;
     }
@@ -56,7 +55,6 @@ public class Team {
         this.id = id;
     }
 
-    //setters
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
