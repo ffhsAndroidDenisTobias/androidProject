@@ -167,6 +167,10 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_CLUB);
         database.execSQL(CREATE_TABLE_TEAM);
+        database.execSQL(CREATE_TABLE_GAME);
+        database.execSQL(CREATE_TABLE_GROUP);
+        database.execSQL(CREATE_TABLE_LEAGUE);
+        database.execSQL(CREATE_TABLE_TEAM_HAS_GAME);
     }
 
     @Override
@@ -176,6 +180,10 @@ public class SqlliteHelper extends SQLiteOpenHelper {
                 + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLUB);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM_HAS_GAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LEAGUE);
         onCreate(db);
     }
 
