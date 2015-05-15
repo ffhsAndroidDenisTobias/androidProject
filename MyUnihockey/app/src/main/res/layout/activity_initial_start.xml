@@ -38,21 +38,16 @@
             android:layout_row="2"
             android:paddingBottom="@dimen/abc_action_bar_progress_bar_size"
             android:paddingLeft="@dimen/abc_action_bar_progress_bar_size"
+            android:paddingRight="@dimen/abc_action_bar_progress_bar_size"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffcdd2"
-            android:textIsSelectable="false"
-            android:paddingRight="@dimen/abc_action_bar_progress_bar_size" />
+            android:textIsSelectable="false" />
 
         <Spinner
-            android:id="@+id/spn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_row="3"
-            android:layout_weight="1"
-            android:backgroundTint="#ffb6b6b6"
-            android:paddingLeft="@dimen/abc_action_bar_progress_bar_size" />
+            android:id="@+id/spinOptions" />
 
         <LinearLayout
             android:id="@+id/progressLayout"

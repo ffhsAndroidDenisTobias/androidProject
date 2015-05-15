@@ -1,22 +1,21 @@
 package myunihockey.ffhs.com.myunihockey.activities;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,14 +23,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import myunihockey.ffhs.com.myunihockey.R;
+import myunihockey.ffhs.com.myunihockey.activities.wizard.WizardPage;
 import myunihockey.ffhs.com.myunihockey.binder.UnihockeyDataBinder;
+
+import myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences;
 import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
 
+import static myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences.*;
 
-public class InitialStartActivity extends ActionBarActivity {
 
-    private static final String MYPREFERENCES = "MY_PREFERENCES";
-    private static final String FIRSTSTART = "firstStart";
+public class InitialStartActivity extends Activity {
+
 
     private int pageCount = 0;
     private Button btnnext;
@@ -41,48 +43,18 @@ public class InitialStartActivity extends ActionBarActivity {
     private TextView txtViewSubheading;
     private ArrayList<WizardPage> wizardContent = new ArrayList<WizardPage>();
     private ArrayList<RadioButton> radioButtons;
-
-    public class WizardPage {
-
-        private String title;
-        private String subtitle;
-        private boolean spinnerVisible;
-
-        public WizardPage(String title, String subtitle) {
-            createWizard(title, subtitle, false);
-        }
-
-        public WizardPage(String title, String subtitle, boolean spinnerVisible) {
-            createWizard(title, subtitle, spinnerVisible);
-
-        }
-
-        private void createWizard(String title, String subtitle, boolean spinnerVisible) {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.spinnerVisible = spinnerVisible;
-        }
-
-        public String getSubtitle() {
-            return subtitle;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
+    private UnihockeyPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_start);
-
+        preferences = new UnihockeyPreferences(this);
 
         //Check properties
-
-        SharedPreferences settings = getSharedPreferences(MYPREFERENCES, MODE_PRIVATE);
-        boolean firstStart = settings.getBoolean(FIRSTSTART, false);
-        if (!firstStart) {
+        if (!preferences.isFirstStart()) {
             startMainPage(false);
         }
 
@@ -100,27 +72,37 @@ public class InitialStartActivity extends ActionBarActivity {
 
     private void startMainPage(boolean firstStart) {
         Intent mainIntent = new Intent(this, MainCard.class);
-        mainIntent.putExtra(FIRSTSTART, firstStart);
         startActivity(mainIntent);
 
     }
 
-    private void setUpPage(int i) {
+    private void setUpPage(final int i) {
 
+        pageCount = i;
 
-        if (i > wizardContent.size()) {
+        if (i >= wizardContent.size()) {
             startMainPage(true);
             return;
         }
 
         for (int index = 0; index < radioButtons.size(); index++) {
             RadioButton radioButton = radioButtons.get(index);
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v instanceof RadioButton) {
+                        RadioButton v1 = (RadioButton) v;
+                        setUpPage((int) v1.getTag(R.id.TAG_WIZARD_PAGEID));
+                    }
+                }
+            });
 
             radioButton.setChecked(false);
             if (index == i) {
                 radioButton.setChecked(true);
             }
         }
+
 
         btnnext.setText("Next");
         btnprev.setText("Prev.");
@@ -137,9 +119,13 @@ public class InitialStartActivity extends ActionBarActivity {
         WizardPage wizardPage = wizardContent.get(i);
         txtViewHeader.setText(wizardPage.getTitle());
         txtViewSubheading.setText(wizardPage.getSubtitle());
+        if (wizardPage.hasSpinner()) {
+            setSpinnerContent(wizardPage.getValues(), i);
+        }
 
 
     }
+
 
     private void setUpProgressBar() {
 
@@ -149,6 +135,7 @@ public class InitialStartActivity extends ActionBarActivity {
 
         for (int i = 0; i < wizardContent.size(); i++) {
             RadioButton radioButton = new RadioButton(this);
+            radioButton.setTag(R.id.TAG_WIZARD_PAGEID, i);
             radioButtons.add(radioButton);
             progressLayout1.addView(radioButton);
         }
@@ -179,24 +166,94 @@ public class InitialStartActivity extends ActionBarActivity {
 
     private void setSpinner() {
         //spinner:
-        spinner = (Spinner) findViewById(R.id.spn);
+        spinner = (Spinner) findViewById(R.id.spinOptions);
     }
 
-    private void setSpinnerContent() {
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.clubs_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    private void setSpinnerContent(ArrayList<String> data, int pageindex) {
 
-        // Apply the adapter to the spinner
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+
+        spinner.setTag(R.id.TAG_WIZARD_PAGEID, pageindex);
+
         spinner.setAdapter(adapter);
+
+        int position = getPreferedSelection(pageindex, adapter);
+
+
+        spinner.setSelection(position);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (parent instanceof Spinner) {
+                    Spinner spin = (Spinner) parent;
+                    int a = (int) spin.getTag(R.id.TAG_WIZARD_PAGEID);
+                    WizardPage wizardPage = wizardContent.get(a);
+
+                    if (wizardPage.hasSpinner() && !(wizardPage.getPreferenceKey().isEmpty())) {
+
+                        String selectedValue = spin.getSelectedItem().toString();
+                        UnihockeyPref unihockeyPref = UnihockeyPref.valueOf(wizardPage.getPreferenceKey());
+                        preferences.setPreference(unihockeyPref, selectedValue);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
+    }
+
+    private int getPreferedSelection(int pageindex, ArrayAdapter adapter) {
+        WizardPage wizardPage = wizardContent.get(pageindex);
+
+        String preference = "";
+        if (wizardPage.hasSpinner() && !(wizardPage.getPreferenceKey().isEmpty())) {
+
+            UnihockeyPref unihockeyPref = UnihockeyPref.valueOf(wizardPage.getPreferenceKey());
+            preference = preferences.getPreference(unihockeyPref);
+        }
+        int position = 0;
+        if (preference != "") {
+
+            position = adapter.getPosition(preference);
+        }
+        return position;
     }
 
     private void SetUpWizardContent() {
         wizardContent.add(new WizardPage("Welcome", "Before we start, may we know something of you? Which is your favorite..."));
-        wizardContent.add(new WizardPage("Club", "Just select the one you like.", true));
-        wizardContent.add(new WizardPage("Team", "You must have a favorite, right? ;-)", true));
+        wizardContent.add(new WizardPage("Club", "Just select the one you like.", true, getclubs(), UnihockeyPref.PREFERENCE_CLUB.name()));
+        wizardContent.add(new WizardPage("Team", "You must have a favorite, right? ;-)", true, getTeams(), UnihockeyPref.PREFERENCE_TEAM.name()));
+    }
+
+
+    private ArrayList<String> getclubs()
+
+    {
+        ArrayList<String> clubs = new ArrayList<String>();
+        clubs.add("club1");
+        clubs.add("club2");
+        clubs.add("club3");
+        clubs.add("club4");
+        return clubs;
+    }
+
+    private ArrayList<String> getTeams() {
+        ArrayList<String> teams = new ArrayList<String>();
+        teams.add("team1");
+        teams.add("team2");
+        teams.add("team3");
+        teams.add("team4");
+        return teams;
     }
 
 
@@ -207,62 +264,18 @@ public class InitialStartActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     private static Handler callback = new Handler();
 
     private static ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ((UnihockeyDataBinder) service).setHandler(callback);
-
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
         }
     };
-
-
-    public void onClickStartService(View view) {
-
-        showAlertDialog();
-
-
-    }
-
-    private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setMessage("Hallo")
-                .setPositiveButton("positivButton", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
-                    }
-                })
-                .setNegativeButton("Oh No!!", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
-        // Create the AlertDialog object and return it
-        builder.create();
-
-    }
 
 
     private void destroyService() {

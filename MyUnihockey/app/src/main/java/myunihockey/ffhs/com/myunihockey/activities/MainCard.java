@@ -1,5 +1,6 @@
 package myunihockey.ffhs.com.myunihockey.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,7 @@ import java.util.List;
 import myunihockey.ffhs.com.myunihockey.R;
 
 
-public class MainCard extends ActionBarActivity {
+public class MainCard extends Activity {
 
 
     private RecyclerView recyclerView;

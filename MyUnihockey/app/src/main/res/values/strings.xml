@@ -5,18 +5,4 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="clubs_array">
-        <item>HCG Aarau</item>
-        <item>UHC Ascona</item>
-        <item>Bassersdorf - Nürensdorf</item>
-        <item>UHC Bassersdorf</item>
-        <item>United Toggenburg Bazenheid</item>
-        <item>UHC Begnins</item>
-        <item>Bern Capitals</item>
-        <item>Satus Bern-Länggasse</item>
-    </string-array>
-
-    <string name="title_activity_activity_teams">ActivityTeams</string>
-    <string name="title_activity_menu_v2">MenuV2Activity</string>
-
 </resources>
