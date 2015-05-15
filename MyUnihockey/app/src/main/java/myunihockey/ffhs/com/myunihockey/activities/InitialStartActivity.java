@@ -32,18 +32,8 @@ import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
 import static myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences.*;
 
 
-public class InitialStartActivity extends Activity {
+public class InitialStartActivity extends AbstractWizard {
 
-
-    private int pageCount = 0;
-    private Button btnnext;
-    private Button btnprev;
-    private Spinner spinner;
-    private TextView txtViewHeader;
-    private TextView txtViewSubheading;
-    private ArrayList<WizardPage> wizardContent = new ArrayList<WizardPage>();
-    private ArrayList<RadioButton> radioButtons;
-    private UnihockeyPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +41,8 @@ public class InitialStartActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_start);
+
+        //TODO: make Preferences be an Interface
         preferences = new UnihockeyPreferences(this);
 
         //Check properties
@@ -62,172 +54,19 @@ public class InitialStartActivity extends Activity {
 
         SetUpWizardContent();
 
-        setSpinner();
-        setUpButtons();
-        setUpHeaders();
-        setUpProgressBar();
+        initWizard();
 
-        setUpPage(0);
+
     }
 
-    private void startMainPage(boolean firstStart) {
+    @Override
+    protected void startMainPage(boolean firstStart) {
+        preferences.setFirstStart(firstStart);
         Intent mainIntent = new Intent(this, MainCard.class);
         startActivity(mainIntent);
 
     }
 
-    private void setUpPage(final int i) {
-
-        pageCount = i;
-
-        if (i >= wizardContent.size()) {
-            startMainPage(true);
-            return;
-        }
-
-        for (int index = 0; index < radioButtons.size(); index++) {
-            RadioButton radioButton = radioButtons.get(index);
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (v instanceof RadioButton) {
-                        RadioButton v1 = (RadioButton) v;
-                        setUpPage((int) v1.getTag(R.id.TAG_WIZARD_PAGEID));
-                    }
-                }
-            });
-
-            radioButton.setChecked(false);
-            if (index == i) {
-                radioButton.setChecked(true);
-            }
-        }
-
-
-        btnnext.setText("Next");
-        btnprev.setText("Prev.");
-
-        if (i == 0) {
-            btnprev.setVisibility(View.INVISIBLE);
-            spinner.setVisibility(View.INVISIBLE);
-        } else {
-            btnprev.setVisibility(View.VISIBLE);
-            spinner.setVisibility(View.VISIBLE);
-
-        }
-
-        WizardPage wizardPage = wizardContent.get(i);
-        txtViewHeader.setText(wizardPage.getTitle());
-        txtViewSubheading.setText(wizardPage.getSubtitle());
-        if (wizardPage.hasSpinner()) {
-            setSpinnerContent(wizardPage.getValues(), i);
-        }
-
-
-    }
-
-
-    private void setUpProgressBar() {
-
-        radioButtons = new ArrayList<RadioButton>();
-        LinearLayout progressLayout1 = (LinearLayout) findViewById(R.id.progressLayout);
-        progressLayout1.removeAllViews();
-
-        for (int i = 0; i < wizardContent.size(); i++) {
-            RadioButton radioButton = new RadioButton(this);
-            radioButton.setTag(R.id.TAG_WIZARD_PAGEID, i);
-            radioButtons.add(radioButton);
-            progressLayout1.addView(radioButton);
-        }
-    }
-
-    private void setUpHeaders() {
-        txtViewHeader = (TextView) findViewById(R.id.txtviewheader);
-        txtViewSubheading = (TextView) findViewById(R.id.txtviewsubheading);
-    }
-
-    private void setUpButtons() {
-        btnnext = (Button) findViewById(R.id.btnnext);
-        btnprev = (Button) findViewById(R.id.btnprev);
-
-        btnnext.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                pageCount++;
-                setUpPage(pageCount);
-            }
-        });
-        btnprev.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                pageCount--;
-                setUpPage(pageCount);
-            }
-        });
-    }
-
-    private void setSpinner() {
-        //spinner:
-        spinner = (Spinner) findViewById(R.id.spinOptions);
-    }
-
-    private void setSpinnerContent(ArrayList<String> data, int pageindex) {
-
-        final ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-
-        spinner.setTag(R.id.TAG_WIZARD_PAGEID, pageindex);
-
-        spinner.setAdapter(adapter);
-
-        int position = getPreferedSelection(pageindex, adapter);
-
-
-        spinner.setSelection(position);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if (parent instanceof Spinner) {
-                    Spinner spin = (Spinner) parent;
-                    int a = (int) spin.getTag(R.id.TAG_WIZARD_PAGEID);
-                    WizardPage wizardPage = wizardContent.get(a);
-
-                    if (wizardPage.hasSpinner() && !(wizardPage.getPreferenceKey().isEmpty())) {
-
-                        String selectedValue = spin.getSelectedItem().toString();
-                        UnihockeyPref unihockeyPref = UnihockeyPref.valueOf(wizardPage.getPreferenceKey());
-                        preferences.setPreference(unihockeyPref, selectedValue);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-
-            }
-        });
-
-    }
-
-    private int getPreferedSelection(int pageindex, ArrayAdapter adapter) {
-        WizardPage wizardPage = wizardContent.get(pageindex);
-
-        String preference = "";
-        if (wizardPage.hasSpinner() && !(wizardPage.getPreferenceKey().isEmpty())) {
-
-            UnihockeyPref unihockeyPref = UnihockeyPref.valueOf(wizardPage.getPreferenceKey());
-            preference = preferences.getPreference(unihockeyPref);
-        }
-        int position = 0;
-        if (preference != "") {
-
-            position = adapter.getPosition(preference);
-        }
-        return position;
-    }
 
     private void SetUpWizardContent() {
         wizardContent.add(new WizardPage("Welcome", "Before we start, may we know something of you? Which is your favorite..."));
@@ -260,7 +99,7 @@ public class InitialStartActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        destroyService();
+       // destroyService();
     }
 
 

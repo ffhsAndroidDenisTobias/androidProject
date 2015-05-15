@@ -17,11 +17,12 @@ public class UnihockeyPreferences {
 
     public enum UnihockeyPref {
         PREFERENCE_TEAM,
-        PREFERENCE_CLUB
+        PREFERENCE_CLUB,
+        FIRSTSTART
+
+
     }
 
-
-    private static final String FIRSTSTART = "firstStart";
     private Activity activity;
 
     public UnihockeyPreferences(Activity activity) {
@@ -32,8 +33,14 @@ public class UnihockeyPreferences {
 
     public boolean isFirstStart() {
 
-        return settings.getBoolean(FIRSTSTART, true);
+        return settings.getBoolean(UnihockeyPref.FIRSTSTART.name(), true);
     }
+
+    public void setFirstStart(boolean isFirst) {
+        settings.edit().putBoolean(UnihockeyPref.FIRSTSTART.name(), isFirst).commit();
+
+    }
+
 
     public String getPreference(UnihockeyPref unihockeyPref) {
         return settings.getString(unihockeyPref.name(), "");
