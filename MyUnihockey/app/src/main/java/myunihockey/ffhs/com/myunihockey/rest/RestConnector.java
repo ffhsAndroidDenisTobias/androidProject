@@ -6,6 +6,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -14,26 +16,35 @@ import java.net.URL;
 public class RestConnector {
 
 
-    public String callRest(String urlString) throws IOException {
+    public InputStream callRest(String urlString) throws IOException {
 
-
-        String resultToDisplay = "";
 
         InputStream in = null;
 
-        // HTTP Get
+        URI url = null;
+        try {
+            url = new URI(urlString);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-        URL url = new URL(urlString);
-
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-        in = new BufferedInputStream(urlConnection.getInputStream());
-        resultToDisplay = IOUtils.toString(in, "UTF-8");
-
-        return resultToDisplay;
+        return callRest(url);
     }
 
+    public InputStream callRest(URI url) throws IOException {
+        return downloadUrl(url.toURL());
+    }
 
+    private InputStream downloadUrl(URL url) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Starts the query
+        conn.connect();
+        return conn.getInputStream();
+    }
 }
 
 

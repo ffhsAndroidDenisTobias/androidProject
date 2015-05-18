@@ -1,6 +1,5 @@
 package myunihockey.ffhs.com.myunihockey.activities;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,21 +7,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import myunihockey.ffhs.com.myunihockey.R;
+import myunihockey.ffhs.com.myunihockey.activities.wizard.AbstractWizard;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.WizardPage;
 import myunihockey.ffhs.com.myunihockey.binder.UnihockeyDataBinder;
 
@@ -51,6 +41,7 @@ public class InitialStartActivity extends AbstractWizard {
         }
 
         //connectToService();
+        //Check if the Service was already called once a day
 
         SetUpWizardContent();
 
@@ -75,9 +66,9 @@ public class InitialStartActivity extends AbstractWizard {
     }
 
 
-    private ArrayList<String> getclubs()
+    private ArrayList<String> getclubs() {
+        //Read from Database
 
-    {
         ArrayList<String> clubs = new ArrayList<String>();
         clubs.add("club1");
         clubs.add("club2");
@@ -87,6 +78,7 @@ public class InitialStartActivity extends AbstractWizard {
     }
 
     private ArrayList<String> getTeams() {
+        //Read from Database
         ArrayList<String> teams = new ArrayList<String>();
         teams.add("team1");
         teams.add("team2");
@@ -98,8 +90,8 @@ public class InitialStartActivity extends AbstractWizard {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-       // destroyService();
+        super.onDestroy();        // destroyService();
+
     }
 
 

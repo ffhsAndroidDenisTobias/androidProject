@@ -1,5 +1,7 @@
 package myunihockey.ffhs.com.myunihockey.persistence;
 
+import android.util.Log;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -25,6 +27,7 @@ public class UnihockeyRestFactoryTest extends TestCase {
     public void testGetAllClubs() {
 
         expectedMinimumUri(testee.getAllClubs());
+
     }
 
     public void testSearchClub() {
@@ -53,7 +56,7 @@ public class UnihockeyRestFactoryTest extends TestCase {
         expectedMinimumUri(testee.getLeagues());
     }
 
-    public void testGetGames(){
+    public void testGetGames() {
         String testquery = "query";
 
         String leagueId = "leagueId";
@@ -88,6 +91,7 @@ public class UnihockeyRestFactoryTest extends TestCase {
 
 
     private void expectedMinimumUri(URI testuri) {
+        Log.v("URL:", testuri.toString());
         expectedHost(testuri);
         expectedApiKey(testuri);
     }

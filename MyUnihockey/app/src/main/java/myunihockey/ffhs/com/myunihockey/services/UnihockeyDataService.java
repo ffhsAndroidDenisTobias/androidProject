@@ -33,8 +33,4 @@ public class UnihockeyDataService extends Service {
     private final IBinder mUnihockeyDataBinder = new UnihockeyDataBinder();
 
 
-
-
-
-
 }

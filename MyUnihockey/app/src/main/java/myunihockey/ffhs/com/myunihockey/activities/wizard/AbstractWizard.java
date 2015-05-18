@@ -1,4 +1,4 @@
-package myunihockey.ffhs.com.myunihockey.activities;
+package myunihockey.ffhs.com.myunihockey.activities.wizard;
 
 import android.app.Activity;
 import android.view.View;
