@@ -12,7 +12,7 @@ import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 /**
  * Created by Denis Bittante on 18.05.2015.
  */
-public class TeamMapper extends AbstractXMLMapper<Club> {
+public class ClubMapper extends AbstractXMLMapper<Club> {
 
     @Override
     List<Club> parse(XmlPullParser parser) throws IOException, XmlPullParserException {
