@@ -47,7 +47,7 @@ public class Team {
         return grouptext;
     }
 
-    public int leaguecode() {
+    public int getLeaguecode() {
         return leaguecode;
     }
 
