@@ -8,9 +8,12 @@ public class Club {
     private int id;
     private String clubName;
 
-    public Club (int id, String clubName){
+    public Club(int id, String clubName) {
         this.id = id;
         this.clubName = clubName;
+    }
+
+    public Club() {
     }
 
     public int getId() {
