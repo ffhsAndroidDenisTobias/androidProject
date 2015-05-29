@@ -4,13 +4,7 @@ package myunihockey.ffhs.com.myunihockey.persistence.dto;
  * Created by Tobi on 20.05.2015.
  */
 public class DTOPersistanceProvider{
-    public String insertClub(Club club){
-        String statement = "INSERT INTO clubs (id, clubName) "
-        + "VALUES ('" + club.getId()
-        + "', '" + club.getClubName()
-        + "');";
-        return  statement;
-    }
+
     public String insertGame(Game game){
         String statement = "INSERT INTO games (id, leaguecode, group, played, goalshome, goalsaway, hometeam_id, awayteam_id, hometeam_name, awayteam_name, date, time) "
                 + "VALUES ('" + game.getId()
