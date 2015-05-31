@@ -28,6 +28,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String KEY_LEAGUETEXT = "leaguetext";
     public static final String KEY_LEAGUECODE = "leaguecode";
     // TEAM Table - column names
+    public static final String KEY_TEAM_ID = "id";
     public static final String KEY_TEAM_NAME = "teamName";
     public static final String KEY_CLUB_ID = "club_id";
     public static final String KEY_GROUP = "group";
@@ -38,6 +39,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
 
 
     // GAME Table - column names
+    public static final String KEY_GAME_ID = "id";
     public static final String KEY_GAME_LEAGUECODE = "leaguecode";
     public static final String KEY_GAME_GROUP = "group";
     public static final String KEY_GAME_SEASON = "season";
@@ -58,12 +60,13 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String KEY_GAME_AWAYTEAM_ID = "awayteam_id";
     public static final String KEY_GAME_HOMETEAM_NAME = "hometeam_name";
     public static final String KEY_GAME_AWAYTEAM_NAME = "awayteam_name";
-
+    public static final String KEY_GAME_DATE = "date";
+    public static final String KEY_GAME_TIME = "time";
 
     // Team table create statement
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE "
             + TABLE_TEAM + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TEAM_ID + " INTEGER PRIMARY KEY,"
             + KEY_TEAM_NAME + " TEXT,"
             + KEY_CLUB_ID + " INTEGER,"
             + KEY_LEAGUETEXT + " TEXT,"
@@ -75,7 +78,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     // Club table create statement
     private static final String CREATE_TABLE_CLUB = "CREATE TABLE "
             + TABLE_CLUB + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_CLUB_ID + " INTEGER PRIMARY KEY,"
             + KEY_CLUB_NAME + " TEXT,"
             + ")";
 
@@ -83,7 +86,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     // Game table create statements
     private static final String CREATE_TABLE_GAME = "CREATE TABLE "
             + TABLE_GAME + "("
-            + KEY_ID + " INTEGER PRIMARY KEY, "
+            + KEY_GAME_ID + " INTEGER PRIMARY KEY, "
             + KEY_GAME_LEAGUECODE + " INTEGER,"
             + KEY_GAME_GROUP + " TEXT,"
             + KEY_GAME_SEASON + " TEXT,"

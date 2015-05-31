@@ -17,7 +17,7 @@ public class Game {
     private String awayteam_id;
     private String hometeam_name;
     private String awayteam_name;
-    private Date date;
+    private String date;
     private String time;
 
     public int getId() {
@@ -51,6 +51,14 @@ public class Game {
     public void setPlayed(boolean played) {
         this.played = played;
     }
+    public void setPlayed(String played) {
+        if (played.equals("false")){
+            this.played = false;
+        }else if(played.equals("true")){
+            this.played = true;
+        }
+    }
+
 
     public int getGoalshome() {
         return goalshome;
@@ -100,11 +108,11 @@ public class Game {
         this.awayteam_name = awayteam_name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -116,7 +124,7 @@ public class Game {
         this.time = time;
     }
 
-    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, Date date, String time) {
+    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, String date, String time) {
         this.id = id;
 
         this.leaguecode = leaguecode;
@@ -131,6 +139,7 @@ public class Game {
         this.time = time;
     }
 
+    public Game(){};
 
 
 

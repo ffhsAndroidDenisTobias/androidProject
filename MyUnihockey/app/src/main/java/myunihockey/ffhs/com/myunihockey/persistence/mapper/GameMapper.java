@@ -45,7 +45,7 @@ public class GameMapper extends AbstractXMLMapper<Game> {
             String awayteam_id = null;
             String hometeam_name = null;
             String awayteam_name = null;
-            Date date = null;
+            String date = null;
             String time = null;
 
 
@@ -92,11 +92,7 @@ public class GameMapper extends AbstractXMLMapper<Game> {
                             awayteam_name = parser.getAttributeValue(i);
                             break;
                         case "date":
-                            try {
-                                date = formatter.parse(parser.getAttributeValue(i));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                            date = parser.getAttributeValue(i);
                             break;
                         case "time":
                             time = parser.getAttributeValue(i);

@@ -13,6 +13,7 @@ public class Team {
     private String grouptext;
     private int leaguecode;
 
+    public Team(){};
     public Team(String teamName, String leaguetext, String grouptext, int id, int club_id, int group, int leaguecode) {
         this.teamName = teamName;
         this.leaguetext = leaguetext;
