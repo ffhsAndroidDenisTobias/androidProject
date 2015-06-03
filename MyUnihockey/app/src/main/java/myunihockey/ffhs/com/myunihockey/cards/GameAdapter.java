@@ -40,7 +40,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         holder.team1.setText(data.getHometeam_name());
         holder.team2.setText(data.getAwayteam_name());
         if (data.isPlayed()) {
-            holder.gameresult.setText(data.getHometeam_name() + ":" + data.getGoalsaway());
+            holder.gameresult.setText(data.getGoalshome() + ":" + data.getGoalsaway());
         } else {
             holder.gameresult.setText("--:--");
         }
