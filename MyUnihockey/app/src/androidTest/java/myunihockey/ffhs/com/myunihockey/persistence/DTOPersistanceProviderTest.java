@@ -5,11 +5,8 @@ import android.app.Activity;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import java.net.URI;
-
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.ClubDataSource;
-import myunihockey.ffhs.com.myunihockey.persistence.dto.DTOPersistanceProvider;
 
 /**
  * Created by Tobi on 20.05.2015.

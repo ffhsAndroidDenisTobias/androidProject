@@ -6,7 +6,8 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:gravity="bottom|left|right|top">
+    android:gravity="bottom|left|right|top"
+    android:background="@android:color/background_light">
 
     <ImageView
         android:id="@+id/isomeoneherer"
@@ -26,8 +27,7 @@
         android:id="@+id/cardList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="100dp"
-        android:paddingEnd="@dimen/abc_action_bar_progress_bar_size" />
+        android:paddingTop="@dimen/abc_action_bar_progress_bar_size" />
 
 
 

@@ -36,9 +36,9 @@ public class InitialStartActivity extends AbstractWizard {
         preferences = new UnihockeyPreferences(this);
 
         //Check properties
-        if (!preferences.isFirstStart()) {
-            startMainPage(false);
-        }
+        //if (!preferences.isFirstStart()) {
+        //    startMainPage(false);
+       // }
 
         //connectToService();
         //Check if the Service was already called once a day

@@ -4,11 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import myunihockey.ffhs.com.myunihockey.persistence.SqlliteHelper;
+import myunihockey.ffhs.com.myunihockey.persistence.mapper.TeamMapper;
 
 /**
  * Created by Denis Bittante on 25.05.2015.
@@ -31,7 +36,7 @@ public class TeamDataSource {
             SqlliteHelper.KEY_GAME_PLAYED,
             SqlliteHelper.KEY_GAME_DATE,
             SqlliteHelper.KEY_GAME_TIME
-            };
+    };
 
 
     public TeamDataSource(Context context) {
@@ -44,6 +49,30 @@ public class TeamDataSource {
 
     public void close() {
         dbHelper.close();
+    }
+
+
+    public void insertTeam(InputStream inputStream) {
+        TeamMapper teamMapper = new TeamMapper();
+        try {
+            open();
+            List<Team> parse = teamMapper.parse(inputStream);
+
+            database.beginTransaction();
+            for (Team team : parse) {
+                database.rawQuery(insertTeam(team), null);
+            }
+            database.endTransaction();
+
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        close();
+
     }
 
 
