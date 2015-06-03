@@ -33,6 +33,6 @@ public class ClubMapperTest extends TestCase {
     public void testTesteeWorks() throws IOException, XmlPullParserException {
         List<Club> parse = testee.parse(in);
 
-        Assert.assertEquals(419, parse.size());
+        Assert.assertEquals(418, parse.size());
     }
 }

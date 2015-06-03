@@ -1,11 +1,14 @@
 package myunihockey.ffhs.com.myunihockey.persistence;
 
+import android.app.Activity;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.net.URI;
 
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
+import myunihockey.ffhs.com.myunihockey.persistence.dto.ClubDataSource;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.DTOPersistanceProvider;
 
 /**
@@ -16,7 +19,7 @@ public class DTOPersistanceProviderTest extends TestCase {
     public void testInsertClub() {
         Club testClub = new Club(10, "UHC FFHS");
         String testquery = "IINSERT INTO clubs (id, clubName) VALUES ('10', 'UHC FFHS');";
-        DTOPersistanceProvider pp = new DTOPersistanceProvider();
+        ClubDataSource pp = new ClubDataSource(new Activity());
         String query = pp.insertClub(testClub);
         Assert.assertEquals(testquery, query);
     }
