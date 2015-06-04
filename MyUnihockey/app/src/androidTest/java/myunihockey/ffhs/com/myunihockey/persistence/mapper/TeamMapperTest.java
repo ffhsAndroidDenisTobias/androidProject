@@ -25,8 +25,8 @@ public class TeamMapperTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        testee = new ClubMapper();
-        in = new RestConnector().callRest(new UnihockeyRestFactory().getAllClubs());
+        testee = new TeamMapper();
+        in = new RestConnector().callRest(new UnihockeyRestFactory().getTeamsByClubId("615"));
 
     }
 

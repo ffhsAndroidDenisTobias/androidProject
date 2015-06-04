@@ -16,8 +16,6 @@ import myunihockey.ffhs.com.myunihockey.persistence.dto.Game;
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder> {
 
     private List<Game> gameList;
-    private LayoutInflater mLayoutInflater;
-
 
     public GameAdapter(List<Game> gameList) {
 

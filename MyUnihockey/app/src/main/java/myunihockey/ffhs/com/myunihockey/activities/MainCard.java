@@ -41,27 +41,28 @@ public class MainCard extends Activity {
         recList.setLayoutManager(llm);
 
 
-        Service s = new Service(this);
+        Service s = new Service(this, recList);
         s.doInBackground(recList);
 
     }
 
 
-    private class Service extends AsyncTask<RecyclerView, String, String>
+    private class Service extends AsyncTask<RecyclerView, String, List<Game>>
 
     {
 
         Context context;
+        RecyclerView recycleView;
 
-        public Service(Context context) {
+        public Service(Context context, RecyclerView recLists) {
             this.context = context;
+            this.recycleView = recLists;
         }
 
 
         @Override
-        protected String doInBackground(RecyclerView... recList) {
+        protected List<Game> doInBackground(RecyclerView... recList) {
 
-            RecyclerView recycleView = recList[0];
 
             GameDataSource dataSource = new GameDataSource(this.context);
             TeamDataSource teamDataSource = new TeamDataSource(this.context);
@@ -89,11 +90,20 @@ public class MainCard extends Activity {
             }
             List<Game> allGames = dataSource.getAllGames();
 
+            return allGames;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(List<Game> allGames) {
             GameAdapter ca = new GameAdapter(allGames);
             recycleView.setAdapter(ca);
-
-            return "finished";
         }
+
 
     }
 
