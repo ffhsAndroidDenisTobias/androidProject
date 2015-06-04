@@ -43,6 +43,8 @@ public class GameMapper extends AbstractXMLMapper<Game> {
             String awayteam_name = null;
             String date = null;
             String time = null;
+            String organizer = null;
+            String organizer_id = null;
 
 
             String name = parser.getName();
@@ -93,12 +95,17 @@ public class GameMapper extends AbstractXMLMapper<Game> {
                         case "time":
                             time = parser.getAttributeValue(i);
                             break;
-
+                        case "organizer":
+                            time = parser.getAttributeValue(i);
+                            break;
+                        case "organizer_id":
+                            time = parser.getAttributeValue(i);
+                            break;
                     }
 
                 }
 
-                Game g = new Game(id, leaguecode, group, hometeam_id, hometeam_name, awayteam_id, awayteam_name, goalshome, goalsaway, date, time);
+                Game g = new Game(id, leaguecode, group, hometeam_id, hometeam_name, awayteam_id, awayteam_name, goalshome, goalsaway, date, time, organizer, organizer_id);
                 entries.add(g);
 
             } else {

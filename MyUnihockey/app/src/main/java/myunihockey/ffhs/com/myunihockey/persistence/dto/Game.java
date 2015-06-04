@@ -19,6 +19,9 @@ public class Game {
     private String awayteam_name;
     private String date;
     private String time;
+    private String organizer;
+    private String organizer_id;
+
 
     public int getId() {
         return id;
@@ -124,7 +127,15 @@ public class Game {
         this.time = time;
     }
 
-    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, String date, String time) {
+    public void setOrganizer (String organizer) { this.organizer = organizer; }
+
+    public String getOrganizer () { return this.organizer; }
+
+    public void setOrganizer_id (String organizer_id) { this.organizer_id = organizer_id; }
+
+    public String getOrganizer_id () { return this.organizer_id; }
+
+    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, String date, String time, String organizer, String organizer_id) {
         this.id = id;
 
         this.leaguecode = leaguecode;
@@ -137,6 +148,8 @@ public class Game {
         this.goalsaway = goalsaway;
         this.date = date;
         this.time = time;
+        this.organizer = organizer;
+        this.organizer_id = organizer_id;
     }
 
     public Game(){};

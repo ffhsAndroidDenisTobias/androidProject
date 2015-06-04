@@ -30,7 +30,9 @@ public class GameDataSource {
             SqlliteHelper.KEY_GAME_GROUP,
             SqlliteHelper.KEY_GAME_PLAYED,
             SqlliteHelper.KEY_GAME_DATE,
-            SqlliteHelper.KEY_GAME_TIME
+            SqlliteHelper.KEY_GAME_TIME,
+            SqlliteHelper.KEY_GAME_ORGANIZER,
+            SqlliteHelper.KEY_GAME_ORGANIZER_ID
             };
 
 
@@ -48,7 +50,7 @@ public class GameDataSource {
 
 
     public String insertClub(Game game) {
-        String statement = "INSERT INTO games (id, leaguecode, group, played, goalshome, goalsaway, hometeam_id, awayteam_id, hometeam_name, awayteam_name, date, time) "
+        String statement = "INSERT INTO games (id, leaguecode, group, played, goalshome, goalsaway, hometeam_id, awayteam_id, hometeam_name, awayteam_name, date, time, organizer, organizer_id) "
                 + "VALUES ('" + game.getId()
                 + "', '" + game.getLeaguecode()
                 + "', '" + game.getGroup()
@@ -61,6 +63,8 @@ public class GameDataSource {
                 + "', '" + game.getAwayteam_name()
                 + "', '" + game.getDate()
                 + "', '" + game.getTime()
+                + "', '" + game.getOrganizer()
+                + "', '" + game.getOrganizer_id()
                 + "');";
         return statement;
     }
