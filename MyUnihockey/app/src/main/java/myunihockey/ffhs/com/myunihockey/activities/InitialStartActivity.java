@@ -5,25 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Window;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import myunihockey.ffhs.com.myunihockey.R;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.AbstractWizard;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.WizardPage;
-import myunihockey.ffhs.com.myunihockey.binder.UnihockeyDataBinder;
-
-import myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences;
+import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
 
-import static myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences.*;
+import static myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences.UnihockeyPref;
 
 
 public class InitialStartActivity extends AbstractWizard {
 
+
+    boolean isBound = false;
+   private UnihockeyDataService unihockeyDataService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +35,16 @@ public class InitialStartActivity extends AbstractWizard {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_start);
 
+
+        doBindService();
+
+
         //TODO: make Preferences be an Interface
-        preferences = new UnihockeyPreferences(this);
 
         //Check properties
         //if (!preferences.isFirstStart()) {
         //    startMainPage(false);
-       // }
+        // }
 
         //connectToService();
         //Check if the Service was already called once a day
@@ -49,6 +55,7 @@ public class InitialStartActivity extends AbstractWizard {
 
 
     }
+
 
     @Override
     protected void startMainPage(boolean firstStart) {
@@ -68,12 +75,11 @@ public class InitialStartActivity extends AbstractWizard {
 
     private ArrayList<String> getclubs() {
         //Read from Database
-
+        Log.d("getClubs", "wiesowiesowieso");
+        List<Club> clubList = unihockeyDataService.loadClubsInDatabase(this);
         ArrayList<String> clubs = new ArrayList<String>();
         clubs.add("club1");
-        clubs.add("club2");
-        clubs.add("club3");
-        clubs.add("club4");
+        clubList.addAll(clubList);
         return clubs;
     }
 
@@ -90,36 +96,42 @@ public class InitialStartActivity extends AbstractWizard {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();        // destroyService();
+        super.onDestroy();
+        doUnbindService();
 
     }
 
+    private ServiceConnection serviceConnection = new ServiceConnection() {
 
-    private static Handler callback = new Handler();
-
-    private static ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            ((UnihockeyDataBinder) service).setHandler(callback);
+            unihockeyDataService = ((UnihockeyDataService.UnihockeyDataBinder) service).getService();
+            Toast.makeText(InitialStartActivity.this, R.string.local_service_connected,
+                    Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+
+            unihockeyDataService = null;
+            Toast.makeText(InitialStartActivity.this, R.string.local_service_disconnected,
+                    Toast.LENGTH_SHORT).show();
         }
     };
 
+    void doBindService() {
+        bindService(new Intent(InitialStartActivity.this, UnihockeyDataService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        isBound = true;
+    }
 
-    private void destroyService() {
-        callback.removeCallbacksAndMessages(null);
-        unbindService(serviceConnection);
-        stopService(new Intent(this, UnihockeyDataService.class));
-        //super.onDestroy();
+    void doUnbindService() {
+
+        if (isBound) {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
     }
 
 
-    private void connectToService() {
-        final Intent unihockeyServiceIntent = new Intent(this, UnihockeyDataService.class);
-        bindService(unihockeyServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-
-    }
 }

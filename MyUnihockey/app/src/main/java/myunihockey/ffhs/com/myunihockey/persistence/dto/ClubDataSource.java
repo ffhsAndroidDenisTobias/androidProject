@@ -3,6 +3,7 @@ package myunihockey.ffhs.com.myunihockey.persistence.dto;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -82,6 +83,7 @@ public class ClubDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            Log.d("CursorTest: ", cursor.getString(1));
             Club comment = cursorToClub(cursor);
             comments.add(comment);
             cursor.moveToNext();

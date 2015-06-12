@@ -40,72 +40,12 @@ public class MainCard extends Activity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-
-        Service s = new Service(this, recList);
-        s.doInBackground(recList);
-
+    /* TODO: Load all GameDataSource
+        GameAdapter ca = new GameAdapter(allGames);
+        recList.setAdapter(ca);
+*/
     }
 
-
-    private class Service extends AsyncTask<RecyclerView, String, List<Game>>
-
-    {
-
-        Context context;
-        RecyclerView recycleView;
-
-        public Service(Context context, RecyclerView recLists) {
-            this.context = context;
-            this.recycleView = recLists;
-        }
-
-
-        @Override
-        protected List<Game> doInBackground(RecyclerView... recList) {
-
-
-            GameDataSource dataSource = new GameDataSource(this.context);
-            TeamDataSource teamDataSource = new TeamDataSource(this.context);
-            ClubDataSource clubDataSource = new ClubDataSource(this.context);
-
-
-            UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
-
-            try {
-
-                URI allClubs = unihockeyRestFactory.getAllClubs();
-                clubDataSource.insertClub(new RestConnector().callRest(allClubs));
-                List<Club> allClubs1 = clubDataSource.getAllClubs();
-                URI teamsByClubId = unihockeyRestFactory.getTeamsByClubId(String.valueOf(allClubs1.get(0).getId()));
-
-                teamDataSource.insertTeam(new RestConnector().callRest(teamsByClubId));
-                List<Team> allTeams = teamDataSource.getAllTeams();
-
-                //TODO: Load all Teams-Games save them and load them again. like above.
-                //TODO: Return all games
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
-            List<Game> allGames = dataSource.getAllGames();
-
-            return allGames;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(List<Game> allGames) {
-            GameAdapter ca = new GameAdapter(allGames);
-            recycleView.setAdapter(ca);
-        }
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

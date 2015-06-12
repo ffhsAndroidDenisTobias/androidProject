@@ -4,5 +4,10 @@
     <string name="app_name">MyUnihockey</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="local_service_started">Unihockey Service Started</string>
+    <string name="local_service_label">Unihockey Info</string>
+    <string name="local_service_stopped">Unihockey Service stopped</string>
+    <string name="local_service_connected">Service connected</string>
+    <string name="local_service_disconnected">Service disconnencted</string>
 
 </resources>
