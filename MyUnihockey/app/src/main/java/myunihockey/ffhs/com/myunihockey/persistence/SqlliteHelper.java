@@ -72,14 +72,14 @@ public class SqlliteHelper extends SQLiteOpenHelper {
             + KEY_LEAGUETEXT + " TEXT,"
             + KEY_GROUP + " INTEGER,"
             + KEY_GROUP_TEXT + " TEXT,"
-            + KEY_LEAGUECODE + " INTEGER,"
+            + KEY_LEAGUECODE + " INTEGER"
             + ")";
 
     // Club table create statement
     private static final String CREATE_TABLE_CLUB = "CREATE TABLE "
             + TABLE_CLUB + "("
             + KEY_CLUB_ID + " INTEGER PRIMARY KEY,"
-            + KEY_CLUB_NAME + " TEXT,"
+            + KEY_CLUB_NAME + " TEXT"
             + ")";
 
 
@@ -117,8 +117,8 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_CLUB);
-        database.execSQL(CREATE_TABLE_TEAM);
-        database.execSQL(CREATE_TABLE_GAME);
+        //database.execSQL(CREATE_TABLE_TEAM);
+        //database.execSQL(CREATE_TABLE_GAME);
     }
 
     @Override
@@ -127,8 +127,8 @@ public class SqlliteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLUB);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
 
         onCreate(db);
     }

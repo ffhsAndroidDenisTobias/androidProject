@@ -7,12 +7,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -32,7 +32,7 @@ import myunihockey.ffhs.com.myunihockey.rest.UnihockeyRestFactory;
  */
 public class UnihockeyDataService extends Service {
 
-
+    private static final String TAG = "UnihockeyDataService";
     private NotificationManager mNM;
     private int NOTIFICATION = R.string.local_service_started;
 
@@ -46,8 +46,11 @@ public class UnihockeyDataService extends Service {
 
     @Override
     public void onCreate() {
+        Log.i(TAG, "Service onCreate");
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         showNotification();
+
+        onStartCommand(null, 0, 0);
     }
 
     private void showNotification() {
@@ -78,11 +81,6 @@ public class UnihockeyDataService extends Service {
         return mUnihockeyDataBinder;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("UnihockeyDataService", "Received start id" + startId + ":" + intent);
-        return START_STICKY;
-    }
 
     @Override
     public void onDestroy() {
@@ -122,4 +120,44 @@ public class UnihockeyDataService extends Service {
     }
 
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.i(TAG, "Service onStartCommand");
+
+        //Creating new thread for my service
+        //Always write your long running tasks in a separate thread, to avoid ANR
+        new Thread(new ClubRunnable(UnihockeyDataService.this)).start();
+
+        return Service.START_STICKY;
+    }
+
+    class ClubRunnable implements Runnable {
+
+        private Context context;
+
+        ClubRunnable(Context context) {
+            this.context = context;
+
+        }
+
+        @Override
+        public void run() {
+
+            ClubDataSource clubDataSource = new ClubDataSource(context);
+
+            UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
+            List<Club> allClubs1 = null;
+            URI allClubs = unihockeyRestFactory.getAllClubs();
+            try {
+                InputStream inputStream = new RestConnector().callRest(allClubs);
+                clubDataSource.insertClub(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            stopSelf();
+        }
+    }
 }

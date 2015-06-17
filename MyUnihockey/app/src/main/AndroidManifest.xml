@@ -19,12 +19,13 @@
             android:name=".activities.MainCard"
             android:label="Willkommen"></activity>
 
-
+        <service
+            android:name=".services.UnihockeyDataService"
+            android:exported="false" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
-    <service android:name=".services.UnihockeyDataService" />
 
 </manifest>

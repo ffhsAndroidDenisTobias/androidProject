@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import myunihockey.ffhs.com.myunihockey.persistence.SqlliteHelper;
+import myunihockey.ffhs.com.myunihockey.persistence.mapper.ClubMapper;
 import myunihockey.ffhs.com.myunihockey.persistence.mapper.GameMapper;
 
 /**
@@ -44,11 +45,12 @@ public class ClubDataSource {
 
     public void insertClub(InputStream inputStream) {
 
-        GameMapper gameMapper = new GameMapper();
+        ClubMapper clubMapper = new ClubMapper();
         try {
-            List<Club> clubs = gameMapper.parse(inputStream);
+            List<Club> clubs = clubMapper.parse(inputStream);
             open();
 
+            Log.d("ClubDataSource", "Start Transaction");
             database.beginTransaction();
             for (Club club : clubs) {
                 database.rawQuery(insertClub(club), null);
@@ -67,10 +69,10 @@ public class ClubDataSource {
     }
 
     public String insertClub(Club club) {
-        String statement = "INSERT INTO clubs (id, clubName) "
+        String statement = "INSERT INTO clubs (club_id, clubName) "
                 + "VALUES ('" + club.getId()
-                + "', '" + club.getClubName()
-                + "');";
+                + "', '" + club.getClubName().replaceAll("\'", " " )
+        +"');";
         return statement;
     }
 

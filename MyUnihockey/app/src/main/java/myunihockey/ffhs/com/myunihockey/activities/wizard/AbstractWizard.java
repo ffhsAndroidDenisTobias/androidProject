@@ -32,6 +32,8 @@ public abstract class AbstractWizard extends Activity {
 
 
     protected void initWizard() {
+
+        preferences = new UnihockeyPreferences(this);
         setSpinner();
         setUpButtons();
         setUpHeaders();
@@ -163,6 +165,7 @@ public abstract class AbstractWizard extends Activity {
 
                         String selectedValue = spin.getSelectedItem().toString();
                         UnihockeyPreferences.UnihockeyPref unihockeyPref = UnihockeyPreferences.UnihockeyPref.valueOf(wizardPage.getPreferenceKey());
+
                         preferences.setPreference(unihockeyPref, selectedValue);
                     }
                 }
