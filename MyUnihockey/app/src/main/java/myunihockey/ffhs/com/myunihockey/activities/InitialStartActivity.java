@@ -1,5 +1,6 @@
 package myunihockey.ffhs.com.myunihockey.activities;
 
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,10 @@ import myunihockey.ffhs.com.myunihockey.activities.wizard.AbstractWizard;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.WizardPage;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.ClubDataSource;
+import myunihockey.ffhs.com.myunihockey.persistence.dto.Game;
+import myunihockey.ffhs.com.myunihockey.persistence.dto.Team;
+import myunihockey.ffhs.com.myunihockey.rest.RestConnector;
+import myunihockey.ffhs.com.myunihockey.rest.UnihockeyRestFactory;
 import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
 
 import static myunihockey.ffhs.com.myunihockey.persistence.preferences.UnihockeyPreferences.UnihockeyPref;
@@ -78,16 +85,15 @@ public class InitialStartActivity extends AbstractWizard {
         //Read from Database
         Log.d("getClubs", "wiesowiesowieso");
 
-      /*  ClubDataSource clubDataSource = new ClubDataSource(this);
-        List<Club> allClubs = clubDataSource.getAllClubs();
-*/
+        ArrayList<String> clubNames = new ArrayList<String>();
+        ClubDataSource cds = new ClubDataSource(this);
+        List<Club> allClubs = cds.getAllClubs();
+        for (Club c : allClubs) {
+            clubNames.add(c.getClubName());
+            Log.d("getClubs", "Club: "+c.getClubName());
+        }
 
-        ArrayList<String> clubs = new ArrayList<String>();
-       /* for (Club c : allClubs) {
-            clubs.add(c.getClubName());
-        }*/
-
-        return clubs;
+        return clubNames;
     }
 
     private ArrayList<String> getTeams() {

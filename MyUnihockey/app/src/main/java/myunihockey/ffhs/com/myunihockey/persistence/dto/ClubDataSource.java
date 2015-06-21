@@ -78,6 +78,11 @@ public class ClubDataSource {
 
 
     public List<Club> getAllClubs() {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<Club> comments = new ArrayList<Club>();
 
         Cursor cursor = database.query(SqlliteHelper.TABLE_CLUB,
