@@ -1,10 +1,12 @@
 package myunihockey.ffhs.com.myunihockey.activities;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -19,6 +21,7 @@ import java.util.List;
 import myunihockey.ffhs.com.myunihockey.R;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.AbstractWizard;
 import myunihockey.ffhs.com.myunihockey.activities.wizard.WizardPage;
+import myunihockey.ffhs.com.myunihockey.persistence.DataBaseAsyncTask;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.ClubDataSource;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Game;
@@ -36,6 +39,44 @@ public class InitialStartActivity extends AbstractWizard {
     boolean isBound = false;
     private UnihockeyDataService unihockeyDataService;
 
+    class Load extends AsyncTask<String, String, String> {
+
+        ProgressDialog progDailog;
+        @Override
+        protected void onPreExecute() {
+            Log.d("onPreExecute","start of onPreExecute");
+            super.onPreExecute();
+            progDailog = new ProgressDialog(InitialStartActivity.this);
+            progDailog.setMessage("Loading...");
+            progDailog.setIndeterminate(false);
+            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progDailog.setCancelable(true);
+            progDailog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... aurl) {
+            Log.d("doInBackground","start of doInBackground");
+            //do something while spinning circling show
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            doBindService();
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String unused) {
+            Log.d("onPostExecute","start of onPostExecute");
+            super.onPostExecute(unused);
+            SetUpWizardContent();
+            initWizard();
+            progDailog.dismiss();
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -43,24 +84,18 @@ public class InitialStartActivity extends AbstractWizard {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_start);
 
-
-        doBindService();
-
+        //Trying to do this in Background and show animation
+        //doBindService();
+        Load asyncTask = new Load();
+        asyncTask.execute();
 
         //TODO: make Preferences be an Interface
-
         //Check properties
         //if (!preferences.isFirstStart()) {
         //    startMainPage(false);
         // }
-
         //connectToService();
         //Check if the Service was already called once a day
-
-        SetUpWizardContent();
-
-        initWizard();
-
 
     }
 
