@@ -21,7 +21,15 @@ public class Game {
     private String time;
     private String organizer;
     private String organizer_id;
+    private String place;
 
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
 
     public int getId() {
         return id;
@@ -135,7 +143,7 @@ public class Game {
 
     public String getOrganizer_id () { return this.organizer_id; }
 
-    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, String date, String time, String organizer, String organizer_id) {
+    public Game(int id, int leaguecode, String group, String hometeam_id, String hometeam_name, String awayteam_id, String awayteam_name, int goalshome, int goalsaway, String date, String time, String organizer, String organizer_id, String place) {
         this.id = id;
 
         this.leaguecode = leaguecode;
@@ -150,6 +158,7 @@ public class Game {
         this.time = time;
         this.organizer = organizer;
         this.organizer_id = organizer_id;
+        this.place = place;
     }
 
     public Game(){};

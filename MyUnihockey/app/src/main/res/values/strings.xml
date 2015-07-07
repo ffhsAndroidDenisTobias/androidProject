@@ -9,5 +9,13 @@
     <string name="local_service_stopped">Unihockey Service stopped</string>
     <string name="local_service_connected">Service connected</string>
     <string name="local_service_disconnected">Service disconnencted</string>
+    <string name="page3Comment">You must have a favorite, right? ;-)</string>
+    <string name="page2Commentar">Just select the one you like.</string>
+    <string name="page1Commentar">Before we start, may we know something of you? Which is your favorite...</string>
+    <string name="page1Title">Welcome</string>
+    <string name="page2Title">Club</string>
+    <string name="page3Title">Team</string>
+    <string name="navNext">Next</string>
+    <string name="navBack">Prev.</string>
 
 </resources>

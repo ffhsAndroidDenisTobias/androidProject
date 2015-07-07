@@ -3,6 +3,7 @@ package myunihockey.ffhs.com.myunihockey.persistence.dto;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -24,23 +25,24 @@ public class TeamDataSource {
     // Database fields
     private SQLiteDatabase database;
     private SqlliteHelper dbHelper;
-    private String[] allColumns = {SqlliteHelper.KEY_GAME_ID,
-            SqlliteHelper.KEY_GAME_AWAYTEAM_ID,
-            SqlliteHelper.KEY_GAME_AWAYTEAM_NAME,
-            SqlliteHelper.KEY_GAME_HOMETEAM_ID,
-            SqlliteHelper.KEY_GAME_HOMETEAM_NAME,
-            SqlliteHelper.KEY_GAME_GOALSHOME,
-            SqlliteHelper.KEY_GAME_GOALSAWAY,
-            SqlliteHelper.KEY_GAME_LEAGUECODE,
-            SqlliteHelper.KEY_GAME_GROUP,
-            SqlliteHelper.KEY_GAME_PLAYED,
-            SqlliteHelper.KEY_GAME_DATE,
-            SqlliteHelper.KEY_GAME_TIME
+    private String[] allColumns = {
+            SqlliteHelper.KEY_TEAM_ID,
+            SqlliteHelper.KEY_TEAM_NAME,
+            SqlliteHelper.KEY_CLUB_ID,
+            SqlliteHelper.KEY_LEAGUETEXT,
+            SqlliteHelper.KEY_GROUP,
+            SqlliteHelper.KEY_GROUP_TEXT,
+            SqlliteHelper.KEY_LEAGUECODE
     };
 
 
     public TeamDataSource(Context context) {
         dbHelper = new SqlliteHelper(context);
+    }
+
+
+    public void openReadable() throws SQLException {
+        database = dbHelper.getReadableDatabase();
     }
 
     public void open() throws SQLException {
@@ -55,14 +57,12 @@ public class TeamDataSource {
     public void insertTeam(InputStream inputStream) {
         TeamMapper teamMapper = new TeamMapper();
         try {
-            open();
+            openReadable();
             List<Team> parse = teamMapper.parse(inputStream);
 
-            database.beginTransaction();
             for (Team team : parse) {
-                database.rawQuery(insertTeam(team), null);
+                database.execSQL(insertTeam(team));
             }
-            database.endTransaction();
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -77,7 +77,7 @@ public class TeamDataSource {
 
 
     public String insertTeam(Team team) {
-        String statement = "INSERT INTO teams (id, teamName, club_id, leaguetext, group, grouptext, leaguecode) "
+        String statement = "INSERT INTO teams (id, teamName, club_id, leaguetext, groupName, grouptext, leaguecode) "
                 + "VALUES ('" + team.getId()
                 + "', '" + team.getTeamName()
                 + "', '" + team.getClub_id()
@@ -91,20 +91,48 @@ public class TeamDataSource {
 
 
     public List<Team> getAllTeams() {
-        List<Team> comments = new ArrayList<Team>();
+        List<Team> teamList = new ArrayList<Team>();
+        try {
+            openReadable();
+
+            Cursor cursor = database.query(SqlliteHelper.TABLE_TEAM,
+                    allColumns, null, null, null, null, null);
+
+            while (cursor.moveToNext()) {
+                Log.d("CursorTest: ", cursor.getString(1));
+                Team comment = cursorToTeam(cursor);
+                teamList.add(comment);
+
+            }
+            // make sure to close the cursor
+
+
+            cursor.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        close();
+        return teamList;
+
+    }
+
+
+    public int getCount() {
+        try {
+            openReadable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Cursor cursor = database.query(SqlliteHelper.TABLE_TEAM,
                 allColumns, null, null, null, null, null);
+        int count = cursor.getCount();
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Team comment = cursorToTeam(cursor);
-            comments.add(comment);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
         cursor.close();
-        return comments;
+
+        close();
+
+        return count;
 
     }
 

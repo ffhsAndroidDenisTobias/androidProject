@@ -88,48 +88,39 @@ public class UnihockeyDataService extends Service {
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
-    public List<Club> loadClubsInDatabase(Context context) {
-
-        Log.d("TestStartService", context.getPackageName());
-
-        GameDataSource dataSource = new GameDataSource(context);
-        TeamDataSource teamDataSource = new TeamDataSource(context);
-        ClubDataSource clubDataSource = new ClubDataSource(context);
-
-
-        UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
-        List<Club> allClubs1 = null;
-        try {
-            // Loads all Clubs
-
-            URI allClubs = unihockeyRestFactory.getAllClubs();
-            clubDataSource.insertClub(new RestConnector().callRest(allClubs));
-            allClubs1 = clubDataSource.getAllClubs();
-            URI teamsByClubId = unihockeyRestFactory.getTeamsByClubId(String.valueOf(allClubs1.get(0).getId()));
-            // Loads all Teams
-            teamDataSource.insertTeam(new RestConnector().callRest(teamsByClubId));
-            List<Team> allTeams = teamDataSource.getAllTeams();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        List<Game> allGames = dataSource.getAllGames();
-        return allClubs1;
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.i(TAG, "Service onStartCommand");
 
+
+        // new Thread(new TeamsAndClubsRunnable(UnihockeyDataService.this));
+
         //Creating new thread for my service
         //Always write your long running tasks in a separate thread, to avoid ANR
         new Thread(new ClubRunnable(UnihockeyDataService.this)).start();
 
         return Service.START_STICKY;
+    }
+
+
+    class TeamsAndClubsRunnable implements Runnable {
+
+        private Context context;
+
+        TeamsAndClubsRunnable(Context context) {
+            this.context = context;
+
+        }
+
+
+        @Override
+        public void run() {
+
+
+        }
+
     }
 
     class ClubRunnable implements Runnable {
@@ -145,19 +136,69 @@ public class UnihockeyDataService extends Service {
         public void run() {
 
             ClubDataSource clubDataSource = new ClubDataSource(context);
+            int count = clubDataSource.getCount();
+            if (count < 5) {
+                loadClubs();
+            }
 
+            TeamDataSource teamDataSource = new TeamDataSource(context);
+            int tcount = teamDataSource.getCount();
+
+            if (tcount < 5) {
+                loadTeams();
+            }
+
+
+            stopSelf();
+
+
+        }
+
+        private void loadClubs() {
+            ClubDataSource clubDataSource = new ClubDataSource(context);
+            Log.i("UnihockeyDataService", "Start loading Clubs");
             UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
-            List<Club> allClubs1 = null;
             URI allClubs = unihockeyRestFactory.getAllClubs();
             try {
                 InputStream inputStream = new RestConnector().callRest(allClubs);
                 clubDataSource.insertClub(inputStream);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("Error Clubs load", "A problem occured while loading Clubs", e);
             }
 
-
-            stopSelf();
+            Log.i("UnihockeyDataService", "Finished loading Clubs");
         }
+
+
+        public void loadTeams() {
+
+            Log.d("TestStartService", context.getPackageName());
+
+            TeamDataSource teamDataSource = new TeamDataSource(context);
+            ClubDataSource clubDataSource = new ClubDataSource(context);
+
+
+            UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
+            List<Club> allClubs1 = null;
+            try {
+                // Loads all Clubs
+
+                allClubs1 = clubDataSource.getAllClubs();
+                for (Club c : allClubs1) {
+
+                    URI teamsByClubId = unihockeyRestFactory.getTeamsByClubId(String.valueOf(c.getId()));
+                    // Loads all Teams
+                    teamDataSource.insertTeam(new RestConnector().callRest(teamsByClubId));
+                }
+                List<Team> allTeams = teamDataSource.getAllTeams();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+            // List<Game> allGames = dataSource.getAllGames();
+        }
+
     }
 }

@@ -16,7 +16,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String LOG = "DatabaseHelper";
 
     public static final String DATABASE_NAME = "unihockey.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 9;
 
     // Table Names
     public static final String TABLE_GAME = "games";
@@ -31,7 +31,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String KEY_TEAM_ID = "id";
     public static final String KEY_TEAM_NAME = "teamName";
     public static final String KEY_CLUB_ID = "club_id";
-    public static final String KEY_GROUP = "group";
+    public static final String KEY_GROUP = "groupName";
     public static final String KEY_GROUP_TEXT = "grouptext";
 
     // CLUB Table - column names
@@ -41,7 +41,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     // GAME Table - column names
     public static final String KEY_GAME_ID = "id";
     public static final String KEY_GAME_LEAGUECODE = "leaguecode";
-    public static final String KEY_GAME_GROUP = "group";
+    public static final String KEY_GAME_GROUP = "groupName";
     public static final String KEY_GAME_SEASON = "season";
     public static final String KEY_GAME_LEAGUETYPE = "leaguetype";
     public static final String KEY_GAME_LEAGUETEXT = "leaguetext";
@@ -60,13 +60,15 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String KEY_GAME_AWAYTEAM_ID = "awayteam_id";
     public static final String KEY_GAME_HOMETEAM_NAME = "hometeam_name";
     public static final String KEY_GAME_AWAYTEAM_NAME = "awayteam_name";
-    public static final String KEY_GAME_DATE = "date";
-    public static final String KEY_GAME_TIME = "time";
+    public static final String KEY_GAME_DATE = "datum";
+    public static final String KEY_GAME_TIME = "zeit";
+    public static final String KEY_GAME_PLACE = "place";
+
 
     // Team table create statement
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE "
             + TABLE_TEAM + "("
-            + KEY_TEAM_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TEAM_ID + " INTEGER ,"
             + KEY_TEAM_NAME + " TEXT,"
             + KEY_CLUB_ID + " INTEGER,"
             + KEY_LEAGUETEXT + " TEXT,"
@@ -78,7 +80,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     // Club table create statement
     private static final String CREATE_TABLE_CLUB = "CREATE TABLE "
             + TABLE_CLUB + "("
-            + KEY_CLUB_ID + " INTEGER PRIMARY KEY,"
+            + KEY_CLUB_ID + " INTEGER,"
             + KEY_CLUB_NAME + " TEXT"
             + ")";
 
@@ -106,7 +108,10 @@ public class SqlliteHelper extends SQLiteOpenHelper {
             + KEY_GAME_HOMETEAM_ID + " INTEGER,"
             + KEY_GAME_AWAYTEAM_ID + " INTEGER,"
             + KEY_GAME_HOMETEAM_NAME + " TEXT,"
-            + KEY_GAME_AWAYTEAM_NAME + " TEXT"
+            + KEY_GAME_AWAYTEAM_NAME + " TEXT, "
+            + KEY_GAME_DATE + " TEXT, "
+            + KEY_GAME_TIME + " TEXT, "
+            + KEY_GAME_PLACE + " TEXT "
             + ")";
 
 
@@ -117,8 +122,8 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_CLUB);
-        //database.execSQL(CREATE_TABLE_TEAM);
-        //database.execSQL(CREATE_TABLE_GAME);
+        database.execSQL(CREATE_TABLE_TEAM);
+        database.execSQL(CREATE_TABLE_GAME);
     }
 
     @Override
@@ -127,8 +132,8 @@ public class SqlliteHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLUB);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TEAM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAME);
 
         onCreate(db);
     }

@@ -73,8 +73,8 @@ public abstract class AbstractWizard extends Activity {
         }
 
 
-        btnnext.setText("Next");
-        btnprev.setText("Prev.");
+        btnnext.setText(getString(R.string.navNext));
+        btnprev.setText(getString(R.string.navBack));
 
         if (i == 0) {
             btnprev.setVisibility(View.INVISIBLE);
