@@ -26,6 +26,7 @@ import myunihockey.ffhs.com.myunihockey.persistence.dto.Club;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.ClubDataSource;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Game;
 import myunihockey.ffhs.com.myunihockey.persistence.dto.Team;
+import myunihockey.ffhs.com.myunihockey.persistence.dto.TeamDataSource;
 import myunihockey.ffhs.com.myunihockey.rest.RestConnector;
 import myunihockey.ffhs.com.myunihockey.rest.UnihockeyRestFactory;
 import myunihockey.ffhs.com.myunihockey.services.UnihockeyDataService;
@@ -35,16 +36,18 @@ import static myunihockey.ffhs.com.myunihockey.persistence.preferences.Unihockey
 
 public class InitialStartActivity extends AbstractWizard {
 
-    List<Club> clubList = new ArrayList<>();
+    private ArrayList<String> clubNames = new ArrayList<String>();
+    private ArrayList<String> teamNames = new ArrayList<String>();
     boolean isBound = false;
     private UnihockeyDataService unihockeyDataService;
 
     class Load extends AsyncTask<String, String, String> {
 
         ProgressDialog progDailog;
+
         @Override
         protected void onPreExecute() {
-            Log.d("onPreExecute","start of onPreExecute");
+            Log.d("onPreExecute", "start of onPreExecute");
             super.onPreExecute();
             progDailog = new ProgressDialog(InitialStartActivity.this);
             progDailog.setMessage("Loading...");
@@ -56,19 +59,44 @@ public class InitialStartActivity extends AbstractWizard {
 
         @Override
         protected String doInBackground(String... aurl) {
-            Log.d("doInBackground","start of doInBackground");
-            //do something while spinning circling show
+            Log.d("doInBackground", "start of doInBackground");
+            publishProgress("Teams loading");
+
+
+            setTeamNames(getTeams());
+
+            publishProgress("Teams loaded");
             try {
-                Thread.sleep(5000);
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            publishProgress("Clubs loading");
+            setClubNames(getclubs());
+            publishProgress("Clubs loaded");
+            try {
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             doBindService();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            progDailog.setMessage(values[0]);
+        }
+
         @Override
         protected void onPostExecute(String unused) {
-            Log.d("onPostExecute","start of onPostExecute");
+            Log.d("onPostExecute", "start of onPostExecute");
             super.onPostExecute(unused);
             SetUpWizardContent();
             initWizard();
@@ -110,37 +138,53 @@ public class InitialStartActivity extends AbstractWizard {
 
 
     private void SetUpWizardContent() {
-        wizardContent.add(new WizardPage("Welcome", "Before we start, may we know something of you? Which is your favorite..."));
-        wizardContent.add(new WizardPage("Club", "Just select the one you like.", true, getclubs(), UnihockeyPref.PREFERENCE_CLUB.name()));
-        wizardContent.add(new WizardPage("Team", "You must have a favorite, right? ;-)", true, getTeams(), UnihockeyPref.PREFERENCE_TEAM.name()));
+        wizardContent.add(new WizardPage(getString(R.string.page1Title), getString(R.string.page1Commentar)));
+        wizardContent.add(new WizardPage(getString(R.string.page2Title), getString(R.string.page2Commentar), true, getClubNames(), UnihockeyPref.PREFERENCE_CLUB.name()));
+        wizardContent.add(new WizardPage(getString(R.string.page3Title), getString(R.string.page3Comment), true, getTeamNames(), UnihockeyPref.PREFERENCE_TEAM.name()));
     }
 
+    public ArrayList<String> getClubNames() {
+        return clubNames;
+    }
+
+    public ArrayList<String> getTeamNames() {
+        return teamNames;
+    }
+
+    public void setClubNames(ArrayList<String> clubNames) {
+        this.clubNames = clubNames;
+    }
+
+    public void setTeamNames(ArrayList<String> teamNames) {
+        this.teamNames = teamNames;
+    }
 
     private ArrayList<String> getclubs() {
         //Read from Database
         Log.d("getClubs", "wiesowiesowieso");
 
-        ArrayList<String> clubNames = new ArrayList<String>();
+        ArrayList<String> cName = new ArrayList<String>();
         ClubDataSource cds = new ClubDataSource(this);
         List<Club> allClubs = cds.getAllClubs();
         for (Club c : allClubs) {
-            clubNames.add(c.getClubName());
-            Log.d("getClubs", "Club: "+c.getClubName());
+            cName.add(c.getClubName());
+            Log.d("getClubs", "Club: " + c.getClubName());
         }
 
-        return clubNames;
+        return cName;
     }
 
     private ArrayList<String> getTeams() {
         //Read from Database
-        ArrayList<String> teams = new ArrayList<String>();
+        ArrayList<String> tNames = new ArrayList<String>();
+        TeamDataSource teamDataSource = new TeamDataSource(this);
+        List<Team> allTeams = teamDataSource.getAllTeams();
 
-        //TODO: Read from Database
-        teams.add("team1");
-        teams.add("team2");
-        teams.add("team3");
-        teams.add("team4");
-        return teams;
+        for (Team team : allTeams) {
+            tNames.add(team.getTeamName());
+        }
+
+        return tNames;
     }
 
 
@@ -182,7 +226,6 @@ public class InitialStartActivity extends AbstractWizard {
     void doUnbindService() {
 
         if (isBound) {
-            unbindService(serviceConnection);
             isBound = false;
         }
     }

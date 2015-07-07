@@ -1,5 +1,6 @@
 package myunihockey.ffhs.com.myunihockey.persistence.dto;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,7 +38,9 @@ public class ClubDataSource {
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
-
+    public void openReadable() throws SQLException {
+        database = dbHelper.getReadableDatabase();
+    }
     public void close() {
         dbHelper.close();
     }
@@ -53,51 +56,53 @@ public class ClubDataSource {
             Log.d("ClubDataSource", "Start Transaction");
             database.beginTransaction();
             for (Club club : clubs) {
-                database.rawQuery(insertClub(club), null);
+                database.insertOrThrow(SqlliteHelper.TABLE_CLUB, null, insertClub(club));
             }
             database.endTransaction();
 
 
         } catch (SQLException e) {
-
+            Log.e("Error in ClubDataSource", "An SQL Exception occured ", e);
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            Log.e("Error in ClubDataSource", "An XmlPullParserException occured ", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Error in ClubDataSource", "An IOException occured ", e);
+        } finally {
+            close();
         }
-
     }
 
-    public String insertClub(Club club) {
-        String statement = "INSERT INTO clubs (club_id, clubName) "
-                + "VALUES ('" + club.getId()
-                + "', '" + club.getClubName().replaceAll("\'", " " )
-        +"');";
-        return statement;
+    public ContentValues insertClub(Club club) {
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(SqlliteHelper.KEY_CLUB_ID, club.getId());
+        contentValues.put(SqlliteHelper.KEY_CLUB_NAME, club.getClubName().replaceAll("\'", " "));
+        return contentValues;
     }
 
 
     public List<Club> getAllClubs() {
         try {
-            open();
+            openReadable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        List<Club> comments = new ArrayList<Club>();
+        List<Club> clubArray = new ArrayList<Club>();
 
         Cursor cursor = database.query(SqlliteHelper.TABLE_CLUB,
                 allColumns, null, null, null, null, null);
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+
+        while (cursor.moveToNext()) {
             Log.d("CursorTest: ", cursor.getString(1));
-            Club comment = cursorToClub(cursor);
-            comments.add(comment);
-            cursor.moveToNext();
+            Club club = cursorToClub(cursor);
+            clubArray.add(club);
         }
         // make sure to close the cursor
         cursor.close();
-        return comments;
+        close();
+        return clubArray;
 
     }
 

@@ -125,11 +125,33 @@ public class UnihockeyDataService extends Service {
 
         Log.i(TAG, "Service onStartCommand");
 
+
+        // new Thread(new TeamsAndClubsRunnable(UnihockeyDataService.this));
+
         //Creating new thread for my service
         //Always write your long running tasks in a separate thread, to avoid ANR
         new Thread(new ClubRunnable(UnihockeyDataService.this)).start();
 
         return Service.START_STICKY;
+    }
+
+
+    class TeamsAndClubsRunnable implements Runnable {
+
+        private Context context;
+
+        TeamsAndClubsRunnable(Context context) {
+            this.context = context;
+
+        }
+
+
+        @Override
+        public void run() {
+
+
+        }
+
     }
 
     class ClubRunnable implements Runnable {
@@ -145,18 +167,17 @@ public class UnihockeyDataService extends Service {
         public void run() {
 
             ClubDataSource clubDataSource = new ClubDataSource(context);
-
+            Log.i("UnihockeyDataService", "Start loading Clubs");
             UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
-            List<Club> allClubs1 = null;
             URI allClubs = unihockeyRestFactory.getAllClubs();
             try {
                 InputStream inputStream = new RestConnector().callRest(allClubs);
                 clubDataSource.insertClub(inputStream);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("Error Clubs load", "A problem occured while loading Clubs", e);
             }
 
-
+            Log.i("UnihockeyDataService", "Finished loading Clubs");
             stopSelf();
         }
     }
