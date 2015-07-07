@@ -16,7 +16,7 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String LOG = "DatabaseHelper";
 
     public static final String DATABASE_NAME = "unihockey.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 5;
 
     // Table Names
     public static final String TABLE_GAME = "games";
@@ -60,8 +60,8 @@ public class SqlliteHelper extends SQLiteOpenHelper {
     public static final String KEY_GAME_AWAYTEAM_ID = "awayteam_id";
     public static final String KEY_GAME_HOMETEAM_NAME = "hometeam_name";
     public static final String KEY_GAME_AWAYTEAM_NAME = "awayteam_name";
-    public static final String KEY_GAME_DATE = "date";
-    public static final String KEY_GAME_TIME = "time";
+    public static final String KEY_GAME_DATE = "datum";
+    public static final String KEY_GAME_TIME = "zeit";
 
     // Team table create statement
     private static final String CREATE_TABLE_TEAM = "CREATE TABLE "
@@ -106,7 +106,9 @@ public class SqlliteHelper extends SQLiteOpenHelper {
             + KEY_GAME_HOMETEAM_ID + " INTEGER,"
             + KEY_GAME_AWAYTEAM_ID + " INTEGER,"
             + KEY_GAME_HOMETEAM_NAME + " TEXT,"
-            + KEY_GAME_AWAYTEAM_NAME + " TEXT"
+            + KEY_GAME_AWAYTEAM_NAME + " TEXT, "
+            + KEY_GAME_DATE + " TEXT, "
+            + KEY_GAME_TIME + " TEXT "
             + ")";
 
 

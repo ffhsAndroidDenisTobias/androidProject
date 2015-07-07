@@ -33,7 +33,7 @@ public class GameDataSource {
             SqlliteHelper.KEY_GAME_TIME,
             SqlliteHelper.KEY_GAME_ORGANIZER,
             SqlliteHelper.KEY_GAME_ORGANIZER_ID
-            };
+    };
 
 
     public GameDataSource(Context context) {
@@ -44,13 +44,17 @@ public class GameDataSource {
         database = dbHelper.getWritableDatabase();
     }
 
+    public void openReadable() throws SQLException {
+        database = dbHelper.getReadableDatabase();
+    }
+
     public void close() {
         dbHelper.close();
     }
 
 
     public String insertClub(Game game) {
-        String statement = "INSERT INTO games (id, leaguecode, group, played, goalshome, goalsaway, hometeam_id, awayteam_id, hometeam_name, awayteam_name, date, time, organizer, organizer_id) "
+        String statement = "INSERT INTO games (id, leaguecode, group, played, goalshome, goalsaway, hometeam_id, awayteam_id, hometeam_name, awayteam_name, datum, zeit, organizer, organizer_id) "
                 + "VALUES ('" + game.getId()
                 + "', '" + game.getLeaguecode()
                 + "', '" + game.getGroup()
@@ -72,18 +76,24 @@ public class GameDataSource {
 
     public List<Game> getAllGames() {
         List<Game> comments = new ArrayList<Game>();
+        try {
+            openReadable();
 
-        Cursor cursor = database.query(SqlliteHelper.TABLE_GAME,
-                allColumns, null, null, null, null, null);
+            Cursor cursor = database.query(SqlliteHelper.TABLE_GAME,
+                    allColumns, null, null, null, null, null);
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Game comment = cursorToGame(cursor);
-            comments.add(comment);
-            cursor.moveToNext();
+
+            while (cursor.moveToNext()) {
+                Game comment = cursorToGame(cursor);
+                comments.add(comment);
+
+            }
+            // make sure to close the cursor
+            cursor.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        // make sure to close the cursor
-        cursor.close();
+        close();
         return comments;
 
     }
