@@ -60,11 +60,9 @@ public class TeamDataSource {
             openReadable();
             List<Team> parse = teamMapper.parse(inputStream);
 
-            database.beginTransaction();
             for (Team team : parse) {
-                database.rawQuery(insertTeam(team), null);
+                database.execSQL(insertTeam(team));
             }
-            database.endTransaction();
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -115,6 +113,26 @@ public class TeamDataSource {
         }
         close();
         return teamList;
+
+    }
+
+
+    public int getCount() {
+        try {
+            openReadable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Cursor cursor = database.query(SqlliteHelper.TABLE_TEAM,
+                allColumns, null, null, null, null, null);
+        int count = cursor.getCount();
+
+        cursor.close();
+
+        close();
+
+        return count;
 
     }
 

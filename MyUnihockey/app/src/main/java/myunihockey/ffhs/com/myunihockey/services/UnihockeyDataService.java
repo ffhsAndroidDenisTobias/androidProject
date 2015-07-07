@@ -88,37 +88,6 @@ public class UnihockeyDataService extends Service {
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
     }
 
-    public List<Club> loadClubsInDatabase(Context context) {
-
-        Log.d("TestStartService", context.getPackageName());
-
-        GameDataSource dataSource = new GameDataSource(context);
-        TeamDataSource teamDataSource = new TeamDataSource(context);
-        ClubDataSource clubDataSource = new ClubDataSource(context);
-
-
-        UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
-        List<Club> allClubs1 = null;
-        try {
-            // Loads all Clubs
-
-            URI allClubs = unihockeyRestFactory.getAllClubs();
-            clubDataSource.insertClub(new RestConnector().callRest(allClubs));
-            allClubs1 = clubDataSource.getAllClubs();
-            URI teamsByClubId = unihockeyRestFactory.getTeamsByClubId(String.valueOf(allClubs1.get(0).getId()));
-            // Loads all Teams
-            teamDataSource.insertTeam(new RestConnector().callRest(teamsByClubId));
-            List<Team> allTeams = teamDataSource.getAllTeams();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        List<Game> allGames = dataSource.getAllGames();
-        return allClubs1;
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -167,6 +136,26 @@ public class UnihockeyDataService extends Service {
         public void run() {
 
             ClubDataSource clubDataSource = new ClubDataSource(context);
+            int count = clubDataSource.getCount();
+            if (count < 5) {
+                loadClubs();
+            }
+
+            TeamDataSource teamDataSource = new TeamDataSource(context);
+            int tcount = teamDataSource.getCount();
+
+            if (tcount < 5) {
+                loadTeams();
+            }
+
+
+            stopSelf();
+
+
+        }
+
+        private void loadClubs() {
+            ClubDataSource clubDataSource = new ClubDataSource(context);
             Log.i("UnihockeyDataService", "Start loading Clubs");
             UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
             URI allClubs = unihockeyRestFactory.getAllClubs();
@@ -178,7 +167,38 @@ public class UnihockeyDataService extends Service {
             }
 
             Log.i("UnihockeyDataService", "Finished loading Clubs");
-            stopSelf();
         }
+
+
+        public void loadTeams() {
+
+            Log.d("TestStartService", context.getPackageName());
+
+            TeamDataSource teamDataSource = new TeamDataSource(context);
+            ClubDataSource clubDataSource = new ClubDataSource(context);
+
+
+            UnihockeyRestFactory unihockeyRestFactory = new UnihockeyRestFactory();
+            List<Club> allClubs1 = null;
+            try {
+                // Loads all Clubs
+
+                allClubs1 = clubDataSource.getAllClubs();
+                for (Club c : allClubs1) {
+
+                    URI teamsByClubId = unihockeyRestFactory.getTeamsByClubId(String.valueOf(c.getId()));
+                    // Loads all Teams
+                    teamDataSource.insertTeam(new RestConnector().callRest(teamsByClubId));
+                }
+                List<Team> allTeams = teamDataSource.getAllTeams();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+            // List<Game> allGames = dataSource.getAllGames();
+        }
+
     }
 }

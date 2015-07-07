@@ -88,7 +88,6 @@ public class GameDataSource {
                 comments.add(comment);
 
             }
-            // make sure to close the cursor
             cursor.close();
         } catch (SQLException e) {
             e.printStackTrace();

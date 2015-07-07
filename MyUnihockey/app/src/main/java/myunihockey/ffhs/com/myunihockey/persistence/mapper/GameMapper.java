@@ -45,7 +45,7 @@ public class GameMapper extends AbstractXMLMapper<Game> {
             String time = null;
             String organizer = null;
             String organizer_id = null;
-
+            String place = null;
 
             String name = parser.getName();
             // Starts by looking for the entry tag
@@ -101,11 +101,14 @@ public class GameMapper extends AbstractXMLMapper<Game> {
                         case "organizer_id":
                             time = parser.getAttributeValue(i);
                             break;
+                        case "place":
+                            place = parser.getAttributeValue(i);
+                            break;
                     }
 
                 }
 
-                Game g = new Game(id, leaguecode, group, hometeam_id, hometeam_name, awayteam_id, awayteam_name, goalshome, goalsaway, date, time, organizer, organizer_id);
+                Game g = new Game(id, leaguecode, group, hometeam_id, hometeam_name, awayteam_id, awayteam_name, goalshome, goalsaway, date, time, organizer, organizer_id, place);
                 entries.add(g);
 
             } else {

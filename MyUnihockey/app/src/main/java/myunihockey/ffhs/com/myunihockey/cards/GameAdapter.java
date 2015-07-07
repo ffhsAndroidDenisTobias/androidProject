@@ -34,7 +34,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         Game data = gameList.get(i);
 
         holder.datum.setText(data.getDate());
-        holder.ort.setText("");
+        holder.ort.setText(data.getPlace());
         holder.team1.setText(data.getHometeam_name());
         holder.team2.setText(data.getAwayteam_name());
         if (data.isPlayed()) {

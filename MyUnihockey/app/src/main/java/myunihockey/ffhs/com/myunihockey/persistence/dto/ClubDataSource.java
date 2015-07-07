@@ -38,9 +38,11 @@ public class ClubDataSource {
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
+
     public void openReadable() throws SQLException {
         database = dbHelper.getReadableDatabase();
     }
+
     public void close() {
         dbHelper.close();
     }
@@ -54,11 +56,10 @@ public class ClubDataSource {
             open();
 
             Log.d("ClubDataSource", "Start Transaction");
-            database.beginTransaction();
+
             for (Club club : clubs) {
-                database.insertOrThrow(SqlliteHelper.TABLE_CLUB, null, insertClub(club));
+                database.execSQL(insertClub(club));
             }
-            database.endTransaction();
 
 
         } catch (SQLException e) {
@@ -72,13 +73,21 @@ public class ClubDataSource {
         }
     }
 
-    public ContentValues insertClub(Club club) {
+    public String insertClub(Club club) {
 
-        ContentValues contentValues = new ContentValues();
+
+        String statement = "INSERT INTO clubs (club_id, clubName) "
+                + "VALUES ('" + club.getId()
+                + "', '" + club.getClubName().replaceAll("\'", " ")
+                + "');";
+        return statement;
+
+
+       /* ContentValues contentValues = new ContentValues();
 
         contentValues.put(SqlliteHelper.KEY_CLUB_ID, club.getId());
         contentValues.put(SqlliteHelper.KEY_CLUB_NAME, club.getClubName().replaceAll("\'", " "));
-        return contentValues;
+        return contentValues; */
     }
 
 
@@ -103,6 +112,26 @@ public class ClubDataSource {
         cursor.close();
         close();
         return clubArray;
+
+    }
+
+
+    public int getCount() {
+        try {
+            openReadable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Cursor cursor = database.query(SqlliteHelper.TABLE_CLUB,
+                allColumns, null, null, null, null, null);
+
+        int count = cursor.getCount();
+
+        cursor.close();
+        close();
+
+        return count;
 
     }
 
